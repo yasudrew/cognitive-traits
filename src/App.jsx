@@ -341,12 +341,12 @@ function AnimBar({ value, max, color, delay, label, pct }) {
 /* ═══ PAGES ═══ */
 function HomePage({ onStart }) {
   return (
-    <div className="fadein" style={{ paddingTop:72, paddingBottom:60 }}>
+    <div className="fadein hero-top" style={{ paddingTop:72, paddingBottom:60 }}>
       <p style={{ fontSize:13, fontWeight:600, color:"var(--muted)", letterSpacing:2, marginBottom:20 }}>COGNITIVE STYLE ASSESSMENT</p>
-      <h1 style={{ fontSize:36, fontWeight:900, color:"var(--text)", lineHeight:1.3, marginBottom:16 }}>
+      <h1 className="hero-title" style={{ fontSize:36, fontWeight:900, color:"var(--text)", lineHeight:1.3, marginBottom:16 }}>
         あなたの認知特性を<br/>知ろう
       </h1>
-      <p style={{ fontSize:15, color:"var(--sub)", lineHeight:1.9, maxWidth:440, marginBottom:40 }}>
+      <p className="hero-sub" style={{ fontSize:15, color:"var(--sub)", lineHeight:1.9, maxWidth:440, marginBottom:40 }}>
         30の質問に答えるだけで、情報の受け取り方・処理の仕方が6タイプの割合で分かります。自分の「脳のクセ」を知って、学び方・働き方を最適化しましょう。
       </p>
       <button className="primary-btn" onClick={onStart}>診断をはじめる<span style={{ marginLeft:8 }}>→</span></button>
@@ -358,8 +358,8 @@ function HomePage({ onStart }) {
           { label:"言語優位", sub:"読んで覚える", type:"verbal" },
           { label:"聴覚優位", sub:"聞いて覚える", type:"auditory" },
         ].map((c,i) => (
-          <div key={c.label} style={{ flex:1, padding:"20px 12px", textAlign:"center", background:"var(--surface)", borderRight:i<2?"1px solid var(--border)":"none" }}>
-            <div style={{ display:"flex", justifyContent:"center", marginBottom:8 }}><CategoryIcon type={c.type} size={36}/></div>
+          <div key={c.label} className="cat-card" style={{ flex:1, padding:"20px 12px", textAlign:"center", background:"var(--surface)", borderRight:i<2?"1px solid var(--border)":"none" }}>
+            <div style={{ display:"flex", justifyContent:"center", marginBottom:8 }}><CategoryIcon type={c.type} size={36} className="cat-icon"/></div>
             <div style={{ fontSize:13, fontWeight:700, color:"var(--text)" }}>{c.label}</div>
             <div style={{ fontSize:11, color:"var(--muted)", marginTop:2 }}>{c.sub}</div>
           </div>
@@ -397,7 +397,7 @@ function QuizPage({ onFinish }) {
       </div>
       <div className={fade} key={idx}>
         <span style={{ display:"inline-block", padding:"3px 10px", borderRadius:4, fontSize:11, fontWeight:500, background:"rgba(0,0,0,0.04)", color:"var(--muted)", marginBottom:12 }}>{q.theme}</span>
-        <h2 style={{ fontSize:19, fontWeight:700, lineHeight:1.8, color:"var(--text)", marginBottom:28 }}>{q.q}</h2>
+        <h2 className="quiz-question" style={{ fontSize:19, fontWeight:700, lineHeight:1.8, color:"var(--text)", marginBottom:28 }}>{q.q}</h2>
         <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
           {LIKERT.map(opt=>(
             <button key={opt.value} className="likert-btn" onClick={()=>handleAnswer(opt.value)}
@@ -425,10 +425,10 @@ function ResultPage({ answers, onNav }) {
   return (
     <div className="fadein" style={{ paddingTop:32, paddingBottom:40 }}>
       {/* Hero */}
-      <div style={{ padding:"36px 24px", borderRadius:16, background:top.bg, border:`1px solid ${top.color}18`, marginBottom:24, textAlign:"center" }}>
+      <div className="result-hero" style={{ padding:"36px 24px", borderRadius:16, background:top.bg, border:`1px solid ${top.color}18`, marginBottom:24, textAlign:"center" }}>
         <div style={{ display:"flex", justifyContent:"center", marginBottom:8 }}><CharacterSVG type={top.id} size={100}/></div>
         <div style={{ display:"inline-block", padding:"4px 12px", borderRadius:4, fontSize:11, fontWeight:600, color:top.color, background:`${top.color}14`, marginBottom:10 }}>{top.category}</div>
-        <h2 style={{ fontSize:26, fontWeight:900, color:top.color, marginBottom:4 }}>{top.label}</h2>
+        <h2 className="result-top-label" style={{ fontSize:26, fontWeight:900, color:top.color, marginBottom:4 }}>{top.label}</h2>
         <p style={{ fontSize:14, color:"var(--sub)" }}>あなたの最も強い認知特性</p>
       </div>
 
@@ -543,6 +543,79 @@ function TypesPage({ onNav }) {
   );
 }
 
+function AboutPage({ onNav }) {
+  return (
+    <div className="fadein" style={{ paddingTop:32, paddingBottom:40 }}>
+      <h2 style={{ fontSize:24, fontWeight:900, color:"var(--text)", marginBottom:4 }}>認知特性とは</h2>
+      <p style={{ fontSize:13, color:"var(--muted)", marginBottom:24 }}>Cognitive Style / Cognitive Characteristics</p>
+
+      <div className="card">
+        <p className="about-body" style={{ fontSize:14, color:"var(--sub)", lineHeight:2, marginBottom:16 }}>
+          認知特性とは、目や耳などの感覚器から入ってきた情報を、頭の中で<strong style={{ color:"var(--text)" }}>理解・整理・記憶・表現する方法</strong>のことです。人によってその処理の仕方には個性があり、同じ情報に触れても、理解の仕方や覚え方が異なります。
+        </p>
+        <p className="about-body" style={{ fontSize:14, color:"var(--sub)", lineHeight:2 }}>
+          たとえば、好きな曲について話すとき「歌詞が好き」という人もいれば「メロディが好き」という人もいます。教科書を読んで覚える人もいれば、講義を聴いて覚える人もいます。この違いこそが、認知特性の違いです。
+        </p>
+      </div>
+
+      <div className="card">
+        <h3 style={{ fontSize:15, fontWeight:700, color:"var(--text)", marginBottom:12 }}>3つのカテゴリと6つのタイプ</h3>
+        <p style={{ fontSize:13, color:"var(--sub)", lineHeight:1.9, marginBottom:16 }}>
+          認知特性は大きく「視覚優位」「言語優位」「聴覚優位」の3カテゴリに分けられ、さらにそれぞれが2つのタイプに分かれます。
+        </p>
+        <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
+          {[
+            { cat:"視覚優位", color:"#D94F3B", desc:"目で見た情報を処理するのが得意", types:["カメラタイプ — 写真のように二次元で記憶", "3Dタイプ — 空間や時間軸で立体的に思考"] },
+            { cat:"言語優位", color:"#2968B0", desc:"読んだ情報を処理するのが得意", types:["ファンタジータイプ — 言葉を映像化して思考", "辞書タイプ — 文字を図式化・体系化して記憶"] },
+            { cat:"聴覚優位", color:"#178F5E", desc:"耳で聞いた情報を処理するのが得意", types:["ラジオタイプ — 言葉を音として処理", "サウンドタイプ — 音色やメロディで理解"] },
+          ].map(c => (
+            <div key={c.cat} style={{ padding:"16px 18px", borderRadius:10, background:`${c.color}08`, border:`1px solid ${c.color}12` }}>
+              <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:8 }}>
+                <Dot color={c.color} size={8}/>
+                <span style={{ fontSize:14, fontWeight:700, color:c.color }}>{c.cat}</span>
+                <span style={{ fontSize:12, color:"var(--muted)" }}>— {c.desc}</span>
+              </div>
+              {c.types.map((t,i) => (
+                <p key={i} style={{ fontSize:12, color:"var(--sub)", lineHeight:1.8, paddingLeft:16 }}>{t}</p>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="card">
+        <h3 style={{ fontSize:15, fontWeight:700, color:"var(--text)", marginBottom:12 }}>知ることのメリット</h3>
+        <div style={{ fontSize:13, color:"var(--sub)", lineHeight:2 }}>
+          <p style={{ marginBottom:12 }}>
+            自分の認知特性を知ると、<strong style={{ color:"var(--text)" }}>自分に合った学び方・働き方</strong>を選べるようになります。たとえば視覚優位の人が音声教材だけで勉強しても効率が上がりにくいように、自分の特性に合わない方法を続けていると、本来の力を発揮しづらくなります。
+          </p>
+          <p style={{ marginBottom:12 }}>
+            また、周囲の人との認知特性の違いを理解することで、<strong style={{ color:"var(--text)" }}>コミュニケーションの改善</strong>にもつながります。「なぜこの人は口頭で伝えた方が理解してくれるのか」「なぜ資料を見せた方が話が早いのか」——その理由が認知特性の違いにあるかもしれません。
+          </p>
+          <p>
+            認知特性は優劣ではなく、あくまで<strong style={{ color:"var(--text)" }}>情報処理の好みや傾向</strong>です。また、環境や経験によって変化する可能性もあるとされています。
+          </p>
+        </div>
+      </div>
+
+      <div className="card">
+        <h3 style={{ fontSize:15, fontWeight:700, color:"var(--text)", marginBottom:12 }}>この診断について</h3>
+        <p style={{ fontSize:13, color:"var(--sub)", lineHeight:2, marginBottom:8 }}>
+          この診断は、小児科医・医学博士の本田真美先生が提唱した認知特性理論をベースに、オリジナルの質問を30問用意したものです。各質問に5段階で回答することで、6タイプそれぞれの傾向を割合で確認できます。
+        </p>
+        <p style={{ fontSize:12, color:"var(--muted)", lineHeight:1.8 }}>
+          ※より正確な診断を受けたい方は、本田先生の「本田40式認知特性テスト」をお試しください。
+        </p>
+      </div>
+
+      <div style={{ display:"flex", gap:12, justifyContent:"center", marginTop:8, flexWrap:"wrap" }}>
+        <button className="primary-btn" onClick={() => onNav("home")}>診断してみる</button>
+        <button className="secondary-btn" onClick={() => onNav("types")}>6タイプ一覧</button>
+      </div>
+    </div>
+  );
+}
+
 /* ═══ APP ═══ */
 export default function App() {
   const [page,setPage]=useState("home");
@@ -582,12 +655,43 @@ export default function App() {
         .section-title{font-size:12px;font-weight:700;color:var(--muted);text-align:center;margin-bottom:16px;letter-spacing:1px;text-transform:uppercase}
         .accordion-row{width:100%;background:none;border:none;padding:14px 24px;cursor:pointer;display:flex;align-items:center;gap:12px;font-family:inherit;transition:background .1s}
         .accordion-row:hover{background:rgba(0,0,0,0.015)}
+        .container{max-width:520px;margin:0 auto;padding:0 20px}
+        @media(min-width:768px){
+          .container{max-width:680px;padding:0 32px}
+          .nav-bar{padding:18px 0}
+          .nav-links{gap:24px}
+          .nav-link{font-size:14px}
+          .nav-logo{font-size:17px}
+          .card{padding:32px;border-radius:16px;margin-bottom:18px}
+          .likert-btn{padding:14px 20px;font-size:15px;border-radius:12px}
+          .likert-num{width:32px;height:32px;font-size:13px}
+          .primary-btn{padding:15px 40px;font-size:15px}
+          .secondary-btn{padding:14px 32px;font-size:14px}
+          .section-title{font-size:13px}
+          .accordion-row{padding:16px 32px}
+          .hero-title{font-size:42px!important}
+          .hero-sub{font-size:16px!important;max-width:520px!important}
+          .hero-top{padding-top:96px!important;padding-bottom:72px!important}
+          .quiz-question{font-size:21px!important}
+          .cat-card{padding:24px 20px!important}
+          .cat-icon{width:44px!important;height:44px!important}
+          .result-hero{padding:48px 36px!important}
+          .result-top-label{font-size:30px!important}
+          .type-card-layout{flex-direction:row!important;align-items:flex-start!important}
+          .about-body{font-size:15px!important}
+        }
+        @media(min-width:1024px){
+          .container{max-width:760px;padding:0 40px}
+          .hero-title{font-size:48px!important}
+          .hero-top{padding-top:112px!important}
+        }
       `}</style>
-      <div style={{ maxWidth:520, margin:"0 auto", padding:"0 20px", fontFamily:"'Zen Kaku Gothic New',sans-serif" }}>
+      <div className="container" style={{ fontFamily:"'Zen Kaku Gothic New',sans-serif" }}>
         <nav className="nav-bar">
           <div className="nav-logo" onClick={()=>navigate("home")}>認知特性診断</div>
           <div className="nav-links">
             <button className={`nav-link ${page==="home"||page==="quiz"?"active":""}`} onClick={()=>navigate("home")}>ホーム</button>
+            <button className={`nav-link ${page==="about"?"active":""}`} onClick={()=>navigate("about")}>認知特性とは</button>
             <button className={`nav-link ${page==="types"?"active":""}`} onClick={()=>navigate("types")}>タイプ一覧</button>
             {resultAnswers&&<button className={`nav-link ${page==="result"?"active":""}`} onClick={()=>navigate("result")}>診断結果</button>}
           </div>
@@ -596,6 +700,7 @@ export default function App() {
         {page==="quiz"&&<QuizPage onFinish={finishQuiz}/>}
         {page==="result"&&resultAnswers&&<ResultPage answers={resultAnswers} onNav={navigate}/>}
         {page==="types"&&<TypesPage onNav={navigate}/>}
+        {page==="about"&&<AboutPage onNav={navigate}/>}
       </div>
     </div>
   );
