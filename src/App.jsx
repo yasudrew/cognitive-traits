@@ -646,7 +646,8 @@ function AboutPage({ onNav }) {
 export default function App() {
   const [page,setPage]=useState("home");
   const [resultAnswers,setResultAnswers]=useState(null);
-  const navigate=(p)=>setPage(p);
+  const [menuOpen,setMenuOpen]=useState(false);
+  const navigate=(p)=>{setPage(p);setMenuOpen(false)};
   const startQuiz=()=>navigate("quiz");
   const finishQuiz=(ans)=>{setResultAnswers(ans);setPage("result")};
 
@@ -661,12 +662,18 @@ export default function App() {
         .fadeout{animation:fo .18s ease forwards}
         @keyframes fi{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
         @keyframes fo{from{opacity:1}to{opacity:0;transform:translateY(-6px)}}
-        .nav-bar{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--border);margin-bottom:4px}
+        .nav-bar{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--border);margin-bottom:4px;position:relative}
         .nav-logo{font-size:15px;font-weight:900;color:var(--text);cursor:pointer;letter-spacing:-0.3px}
-        .nav-links{display:flex;gap:16px}
-        .nav-link{font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;background:none;border:none;font-family:inherit;padding:4px 0;transition:color .15s;border-bottom:1.5px solid transparent}
-        .nav-link:hover{color:var(--text)}
-        .nav-link.active{color:var(--text);border-bottom-color:var(--text)}
+        .nav-links{display:none;flex-direction:column;position:absolute;top:100%;left:0;right:0;background:var(--surface);border:1px solid var(--border);border-radius:0 0 12px 12px;padding:8px 0;z-index:100;box-shadow:0 8px 24px rgba(0,0,0,0.08)}
+        .nav-links.open{display:flex}
+        .nav-link{font-size:14px;font-weight:500;color:var(--muted);cursor:pointer;background:none;border:none;font-family:inherit;padding:12px 20px;transition:all .15s;border-bottom:none;text-align:left;width:100%}
+        .nav-link:hover{color:var(--text);background:rgba(0,0,0,0.02)}
+        .nav-link.active{color:var(--text);background:rgba(0,0,0,0.03)}
+        .hamburger{display:flex;flex-direction:column;gap:4px;background:none;border:none;cursor:pointer;padding:6px}
+        .hamburger span{display:block;width:20px;height:2px;background:var(--text);border-radius:1px;transition:all .2s}
+        .hamburger.open span:nth-child(1){transform:rotate(45deg) translate(3px,4px)}
+        .hamburger.open span:nth-child(2){opacity:0}
+        .hamburger.open span:nth-child(3){transform:rotate(-45deg) translate(3px,-4px)}
         .primary-btn{background:var(--text);color:var(--bg);border:none;padding:13px 32px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s;display:inline-flex;align-items:center}
         .primary-btn:hover{opacity:.85;transform:translateY(-1px)}
         .secondary-btn{background:none;color:var(--text);border:1.5px solid var(--border);padding:12px 24px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .15s}
@@ -685,6 +692,11 @@ export default function App() {
         .container{max-width:520px;margin:0 auto;padding:0 20px}
         @media(min-width:768px){
           .sp-only{display:none}
+          .hamburger{display:none}
+          .nav-links{display:flex!important;flex-direction:row;position:static;background:none;border:none;padding:0;box-shadow:none;gap:24px}
+          .nav-link{padding:4px 0;font-size:14px;text-align:center;width:auto;border-bottom:1.5px solid transparent}
+          .nav-link:hover{background:none;color:var(--text)}
+          .nav-link.active{background:none;color:var(--text);border-bottom-color:var(--text)}
           .container{max-width:680px;padding:0 32px}
           .nav-bar{padding:18px 0}
           .nav-links{gap:24px}
@@ -717,7 +729,10 @@ export default function App() {
       <div className="container" style={{ fontFamily:"'Zen Kaku Gothic New',sans-serif" }}>
         <nav className="nav-bar">
           <div className="nav-logo" onClick={()=>navigate("home")}>認知特性診断</div>
-          <div className="nav-links">
+          <button className={`hamburger${menuOpen?" open":""}`} onClick={()=>setMenuOpen(!menuOpen)}>
+            <span/><span/><span/>
+          </button>
+          <div className={`nav-links${menuOpen?" open":""}`}>
             <button className={`nav-link ${page==="home"||page==="quiz"?"active":""}`} onClick={()=>navigate("home")}>ホーム</button>
             <button className={`nav-link ${page==="about"?"active":""}`} onClick={()=>navigate("about")}>認知特性とは</button>
             <button className={`nav-link ${page==="types"?"active":""}`} onClick={()=>navigate("types")}>タイプ一覧</button>
