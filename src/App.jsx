@@ -344,9 +344,9 @@ function HomePage({ onStart }) {
     <div className="fadein hero-top" style={{ paddingTop:72, paddingBottom:60 }}>
       <p style={{ fontSize:13, fontWeight:600, color:"var(--muted)", letterSpacing:2, marginBottom:20 }}>COGNITIVE STYLE ASSESSMENT</p>
       <h1 className="hero-title" style={{ fontSize:36, fontWeight:900, color:"var(--text)", lineHeight:1.3, marginBottom:16 }}>
-        あなたの認知特性を<br/>知ろう
+        あなたの認知特性を<br className="sp-only"/>知ろう
       </h1>
-      <p className="hero-sub" style={{ fontSize:15, color:"var(--sub)", lineHeight:1.9, maxWidth:440, marginBottom:40 }}>
+      <p className="hero-sub" style={{ fontSize:15, color:"var(--sub)", lineHeight:1.9, marginBottom:40 }}>
         30の質問に答えるだけで、情報の受け取り方・処理の仕方が6タイプの割合で分かります。自分の「脳のクセ」を知って、学び方・働き方を最適化しましょう。
       </p>
       <button className="primary-btn" onClick={onStart}>診断をはじめる<span style={{ marginLeft:8 }}>→</span></button>
@@ -681,8 +681,10 @@ export default function App() {
         .section-title{font-size:12px;font-weight:700;color:var(--muted);text-align:center;margin-bottom:16px;letter-spacing:1px;text-transform:uppercase}
         .accordion-row{width:100%;background:none;border:none;padding:14px 24px;cursor:pointer;display:flex;align-items:center;gap:12px;font-family:inherit;transition:background .1s}
         .accordion-row:hover{background:rgba(0,0,0,0.015)}
+        .sp-only{display:inline}
         .container{max-width:520px;margin:0 auto;padding:0 20px}
         @media(min-width:768px){
+          .sp-only{display:none}
           .container{max-width:680px;padding:0 32px}
           .nav-bar{padding:18px 0}
           .nav-links{gap:24px}
@@ -696,7 +698,7 @@ export default function App() {
           .section-title{font-size:13px}
           .accordion-row{padding:16px 32px}
           .hero-title{font-size:42px!important}
-          .hero-sub{font-size:16px!important;max-width:520px!important}
+          .hero-sub{font-size:16px!important;max-width:100%!important}
           .hero-top{padding-top:96px!important;padding-bottom:72px!important}
           .quiz-question{font-size:21px!important}
           .cat-card{padding:24px 20px!important}
