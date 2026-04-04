@@ -418,18 +418,38 @@ function ResultPage({ answers, onNav }) {
   Object.entries(answers).forEach(([qi,val])=>{scores[QUESTIONS[parseInt(qi)].type]+=val});
   const maxP=25;
   const sorted=[...TYPES].sort((a,b)=>(scores[b.id]||0)-(scores[a.id]||0));
-  const top=sorted[0];
+  const topScore=scores[sorted[0].id]||0;
+  const topTypes=sorted.filter(t=>(scores[t.id]||0)===topScore);
+  const top=topTypes[0];
   const [openId,setOpenId]=useState(null);
   const getLevel=s=>{ if(s>=21)return"非常に強い"; if(s>=16)return"やや強い"; if(s>=11)return"標準"; return"弱め" };
+
+  // Find next tier (first type below top score) for advice
+  const nextTypes=sorted.filter(t=>(scores[t.id]||0)<topScore);
 
   return (
     <div className="fadein" style={{ paddingTop:32, paddingBottom:40 }}>
       {/* Hero */}
-      <div className="result-hero" style={{ padding:"36px 24px", borderRadius:16, background:top.bg, border:`1px solid ${top.color}18`, marginBottom:24, textAlign:"center" }}>
-        <div style={{ display:"flex", justifyContent:"center", marginBottom:8 }}><CharacterSVG type={top.id} size={100}/></div>
-        <div style={{ display:"inline-block", padding:"4px 12px", borderRadius:4, fontSize:11, fontWeight:600, color:top.color, background:`${top.color}14`, marginBottom:10 }}>{top.category}</div>
-        <h2 className="result-top-label" style={{ fontSize:26, fontWeight:900, color:top.color, marginBottom:4 }}>{top.label}</h2>
-        <p style={{ fontSize:14, color:"var(--sub)" }}>あなたの最も強い認知特性</p>
+      <div className="result-hero" style={{ padding:"36px 24px", borderRadius:16, background:topTypes.length===1?top.bg:"var(--surface)", border:`1px solid ${topTypes.length===1?top.color+"18":"var(--border)"}`, marginBottom:24, textAlign:"center" }}>
+        <div style={{ display:"flex", justifyContent:"center", gap:topTypes.length>1?16:0, marginBottom:8 }}>
+          {topTypes.map(t=><CharacterSVG key={t.id} type={t.id} size={topTypes.length>2?72:topTypes.length>1?88:100}/>)}
+        </div>
+        <div style={{ display:"flex", justifyContent:"center", gap:8, flexWrap:"wrap", marginBottom:10 }}>
+          {topTypes.map(t=>(
+            <span key={t.id} style={{ display:"inline-block", padding:"4px 12px", borderRadius:4, fontSize:11, fontWeight:600, color:t.color, background:`${t.color}14` }}>{t.category}</span>
+          ))}
+        </div>
+        <h2 className="result-top-label" style={{ fontSize:topTypes.length>2?22:26, fontWeight:900, color:topTypes.length===1?top.color:"var(--text)", marginBottom:4 }}>
+          {topTypes.map((t,i)=>(
+            <span key={t.id}>
+              {i>0&&<span style={{ color:"var(--muted)", fontWeight:400 }}> ・ </span>}
+              <span style={{ color:t.color }}>{t.label}</span>
+            </span>
+          ))}
+        </h2>
+        <p style={{ fontSize:14, color:"var(--sub)" }}>
+          {topTypes.length===1?"あなたの最も強い認知特性":`${topTypes.length}つのタイプが同率で最も強い認知特性です`}
+        </p>
       </div>
 
       {/* Bars */}
@@ -484,11 +504,17 @@ function ResultPage({ answers, onNav }) {
       </div>
 
       {/* Advice */}
-      <div className="card" style={{ background:top.bg, borderColor:`${top.color}18` }}>
-        <p style={{ fontSize:14, fontWeight:700, color:top.color, marginBottom:8 }}>あなたへのアドバイス</p>
+      <div className="card" style={{ background:topTypes.length===1?top.bg:"var(--surface)", borderColor:topTypes.length===1?`${top.color}18`:"var(--border)" }}>
+        <p style={{ fontSize:14, fontWeight:700, color:topTypes.length===1?top.color:"var(--text)", marginBottom:8 }}>あなたへのアドバイス</p>
         <p style={{ fontSize:13, color:"var(--sub)", lineHeight:1.8, marginBottom:8 }}>
-          あなたは<strong style={{ color:top.color }}>{top.label}</strong>の傾向が最も強いですが、認知特性は一つだけに決まるものではありません。
-          {sorted[1]&&<>2番目の<strong style={{ color:sorted[1].color }}>{sorted[1].label}</strong>も活用し、自分に合ったインプット・アウトプットの方法を見つけましょう。</>}
+          {topTypes.length===1?(
+            <>あなたは<strong style={{ color:top.color }}>{top.label}</strong>の傾向が最も強いですが、認知特性は一つだけに決まるものではありません。
+            {nextTypes[0]&&<>2番目の<strong style={{ color:nextTypes[0].color }}>{nextTypes[0].label}</strong>も活用し、自分に合ったインプット・アウトプットの方法を見つけましょう。</>}</>
+          ):(
+            <>あなたは{topTypes.map((t,i)=>(
+              <span key={t.id}>{i>0&&"・"}<strong style={{ color:t.color }}>{t.label}</strong></span>
+            ))}が同じ強さで出ています。複数の認知チャンネルをバランスよく使えるタイプです。場面に応じて得意な処理方法を使い分けることで、さらに力を発揮できるでしょう。</>
+          )}
         </p>
         <p style={{ fontSize:11, color:"var(--muted)", lineHeight:1.7 }}>
           ※本田真美先生の認知特性理論を参考にしたオリジナル版です。正式な診断は「本田40式認知特性テスト」をお試しください。
