@@ -9,7 +9,8 @@ type Text = { stem: string; a: string; b: string };
  * 設計方針:
  * - 能力や経験（できる・得意）ではなく、頭の中に自然に浮かぶ情報の形を聞く
  * - 誰でも経験している日常の場面だけを使う（楽器・スポーツ・絵など訓練が要る場面は避ける）
- * - 両方の選択肢が同じくらい望ましく見えるようにする
+ * - 両方の選択肢が同じくらい望ましく見えるようにする（「整理」「正確」など有能さを感じさせる語を片側だけに置かない）
+ * - 「ほぼ誰でもそうする」選択肢を置かない（例: やって見せてもらう方が分かりやすい、数字は唱えて覚える）
  * - 6タイプの全15組を2問ずつ比較する。同じ組の2問は15問離し、A/Bの上下を入れ替える
  */
 export type PairQuestion = { a: TypeId; b: TypeId; text: Record<Lang, Text> };
@@ -39,8 +40,8 @@ export const QUESTIONS: readonly PairQuestion[] = [
   {
     a: "camera", b: "dictionary",
     text: {
-      ja: { stem: "人の名前を思い出そうとするとき", a: "顔や服装など、見た目が先に浮かぶ", b: "名前の漢字や文字の並びが浮かぶ" },
-      en: { stem: "When trying to remember someone's name", a: "Their face or clothes come to mind first", b: "The spelling or written form of the name comes to mind" },
+      ja: { stem: "初めて会った人の名前を覚えるとき", a: "顔や服装の見た目と結びつけて覚える", b: "名前の漢字や文字の並びを思い浮かべて覚える" },
+      en: { stem: "When learning the name of someone you just met", a: "You link it to how they look — face, clothes", b: "You picture how the name is written" },
     },
   },
   {
@@ -67,15 +68,15 @@ export const QUESTIONS: readonly PairQuestion[] = [
   {
     a: "3d", b: "fantasy",
     text: {
-      ja: { stem: "何かのやり方を教わるとき、分かりやすいのは", a: "目の前でやって見せてもらう", b: "「たとえば〜みたいな感じ」と、たとえで説明してもらう" },
-      en: { stem: "When learning how to do something, it clicks when", a: "Someone shows you by doing it in front of you", b: "Someone explains it with an analogy — \"it's kind of like…\"" },
+      ja: { stem: "人の体験談を聞いているとき、頭の中で追っているのは", a: "どこからどこへ移動したかなど、位置関係や動き", b: "その場の雰囲気や人物の様子が浮かぶ、物語としての場面" },
+      en: { stem: "While listening to someone's story, what you follow in your head is", a: "Positions and movement — where they went from and to", b: "The scene as a story — the mood and how people looked" },
     },
   },
   {
     a: "dictionary", b: "sound",
     text: {
-      ja: { stem: "外国語の単語を覚えるとき", a: "つづりや文字の形、意味のつながりで覚える", b: "発音の響きやイントネーションで覚える" },
-      en: { stem: "When memorizing a word in a foreign language", a: "You remember its spelling and how its meaning connects", b: "You remember how it sounds and its intonation" },
+      ja: { stem: "外国語の単語を覚えるとき", a: "つづりや文字の形ごと覚える", b: "発音のリズムや抑揚ごと覚える" },
+      en: { stem: "When memorizing a word in a foreign language", a: "You remember it by its spelling and written shape", b: "You remember it by its rhythm and intonation" },
     },
   },
   {
@@ -88,8 +89,8 @@ export const QUESTIONS: readonly PairQuestion[] = [
   {
     a: "3d", b: "dictionary",
     text: {
-      ja: { stem: "人に道順を説明するとき", a: "頭の中で道を歩きながら、見える景色の順に話す", b: "「2つ目の信号を右」のように、要点を整理して話す" },
-      en: { stem: "When giving someone directions", a: "You walk the route in your head and describe what you see", b: "You organize the key points — \"right at the second light\"" },
+      ja: { stem: "人に道順を説明するとき", a: "頭の中で道を歩きながら、見える景色の順に話す", b: "「2つ目の信号を右」のように、曲がる場所を言葉で並べて話す" },
+      en: { stem: "When giving someone directions", a: "You walk the route in your head and describe what you see", b: "You list the turns in words — \"right at the second light\"" },
     },
   },
   {
@@ -102,8 +103,8 @@ export const QUESTIONS: readonly PairQuestion[] = [
   {
     a: "camera", b: "fantasy",
     text: {
-      ja: { stem: "何かを覚えるとき、残りやすいのは", a: "実際に目で見た写真や図そのもの", b: "言葉で説明された内容から、自分で思い描いた場面" },
-      en: { stem: "What tends to stay in memory is", a: "The actual photo or diagram you saw", b: "A scene you pictured yourself from a verbal description" },
+      ja: { stem: "旅行のガイドブックを読んだあと、印象に残っているのは", a: "載っていた写真の構図や色", b: "文章から自分で思い描いた景色" },
+      en: { stem: "After reading a travel guidebook, what stays with you is", a: "The framing and colors of the photos in it", b: "The scenery you pictured from the text" },
     },
   },
   {
@@ -123,8 +124,8 @@ export const QUESTIONS: readonly PairQuestion[] = [
   {
     a: "3d", b: "camera",
     text: {
-      ja: { stem: "家具を組み立てるとき", a: "部品を頭の中で回したり動かしたりして試す", b: "説明書の図とそっくりの絵を見比べて確かめる" },
-      en: { stem: "When assembling furniture", a: "You rotate and move the parts in your head to try them out", b: "You compare against the picture in the manual to check" },
+      ja: { stem: "部屋の家具の配置を考えるとき", a: "家具を頭の中で動かして、いろいろな置き方を試す", b: "仕上がった部屋の様子を、写真のような一枚の絵で思い浮かべる" },
+      en: { stem: "When planning how to arrange furniture in a room", a: "You move the furniture around in your head to try layouts", b: "You picture the finished room as a single photo-like image" },
     },
   },
   {
@@ -165,8 +166,8 @@ export const QUESTIONS: readonly PairQuestion[] = [
   {
     a: "radio", b: "camera",
     text: {
-      ja: { stem: "電話番号や暗証番号を覚えるとき", a: "声に出したり、心の中で唱えたりする", b: "数字の並びを、形として目に焼き付ける" },
-      en: { stem: "When memorizing a phone number or PIN", a: "You say it aloud or repeat it in your head", b: "You burn the shape of the digits into your eyes" },
+      ja: { stem: "テレビのニュースを後から思い出すとき", a: "キャスターが話していた言葉", b: "映っていた映像やテロップの見た目" },
+      en: { stem: "When you recall a TV news segment later", a: "The words the anchor said", b: "The footage and on-screen captions as they looked" },
     },
   },
   {
@@ -221,8 +222,8 @@ export const QUESTIONS: readonly PairQuestion[] = [
   {
     a: "radio", b: "dictionary",
     text: {
-      ja: { stem: "覚えたいことがあるとき、しっくりくるのは", a: "口に出したり人に話したりして、耳で確かめる", b: "書き出して整理し、目で文字を確かめる" },
-      en: { stem: "When you want to remember something, it feels right to", a: "Say it aloud or tell someone, checking it by ear", b: "Write it out, organize it, and check the words by eye" },
+      ja: { stem: "覚えたいことを繰り返すとき、しっくりくるのは", a: "声に出して繰り返す", b: "紙に書いて繰り返す" },
+      en: { stem: "When repeating something to remember it, it feels right to", a: "Say it aloud, over and over", b: "Write it down, over and over" },
     },
   },
 ];
