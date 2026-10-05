@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { ResultView } from "@/components/ResultView";
 import { UI, getType } from "@/lib/content";
 import { fill, isLang } from "@/lib/i18n";
+import { decodeChallenge } from "@/lib/challenge";
 import { analyze, decodeAnswers } from "@/lib/scoring";
 import { absoluteUrl, alternates } from "@/lib/site";
 
@@ -24,10 +25,13 @@ export async function generateMetadata({ params }: PageProps<"/[lang]/r/[code]">
   };
 }
 
-export default async function ResultPage({ params }: PageProps<"/[lang]/r/[code]">) {
+export default async function ResultPage({ params, searchParams }: PageProps<"/[lang]/r/[code]">) {
   const { lang, code } = await params;
+  const { x } = await searchParams;
+  const challenge = typeof x === "string" ? decodeChallenge(x) : null;
   if (!isLang(lang)) notFound();
   const answers = decodeAnswers(code);
   if (!answers) notFound();
-  return <ResultView analysis={analyze(answers)} lang={lang} shareUrl={absoluteUrl(lang, `/r/${code}`)} />;
+  const shareUrl = absoluteUrl(lang, `/r/${code}`) + (challenge && typeof x === "string" ? `?x=${x}` : "");
+  return <ResultView analysis={analyze(answers)} lang={lang} shareUrl={shareUrl} resultCode={code} challenge={challenge} />;
 }

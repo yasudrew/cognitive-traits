@@ -85,3 +85,16 @@ a.primary-btn,a.secondary-btn,a.nav-link,a.nav-logo{text-decoration:none}
 .avg-line{position:absolute;top:-3px;bottom:-3px;left:50%;width:1.5px;background:rgba(0,0,0,0.25)}
 .split{display:flex;height:10px;border-radius:5px;overflow:hidden;margin-top:6px}
 .badge{display:inline-block;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:700}
+.rot-pair{display:flex;justify-content:center;gap:8px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px}
+.choice-btn{justify-content:center;width:100%;padding:14px 8px}
+.mem-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:300px;margin:0 auto}
+.mem-grid.small{max-width:180px;margin-bottom:20px}
+.mem-cell{aspect-ratio:1;display:flex;align-items:center;justify-content:center;background:var(--surface);border:1.5px solid var(--border);border-radius:10px;font-size:22px;font-weight:900;color:var(--muted);font-family:inherit}
+.mem-cell.target{border-color:var(--text);color:var(--text);background:rgba(0,0,0,0.04)}
+.mem-cell.tap{cursor:pointer;transition:all .12s}
+.mem-cell.tap:hover{border-color:var(--text);background:rgba(0,0,0,0.03)}
+.mem-options{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.mem-option{aspect-ratio:1;display:flex;align-items:center;justify-content:center;background:var(--surface);border:1.5px solid var(--border);border-radius:12px;cursor:pointer;transition:all .12s}
+.mem-option:hover{border-color:var(--text);transform:translateY(-1px)}
+.countdown{height:3px;background:var(--text);border-radius:2px;margin:0 auto 16px;max-width:300px;transform-origin:left;animation:countdown linear forwards}
+@keyframes countdown{from{transform:scaleX(1)}to{transform:scaleX(0)}}

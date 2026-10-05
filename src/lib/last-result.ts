@@ -8,7 +8,8 @@ const read = (): string | null => {
   try {
     const code = window.localStorage.getItem(KEY);
     // 形式が変わった古いコードは結果を復元できないので無視する
-    return code && decodeAnswers(code) ? code : null;
+    // 「結果コード」または「結果コード?x=チャレンジコード」を保存している
+    return code && decodeAnswers(code.split("?")[0]) ? code : null;
   } catch {
     // プライベートモード等で使えない場合は「保存なし」として扱う
     return null;

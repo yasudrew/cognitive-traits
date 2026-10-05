@@ -1,16 +1,18 @@
 import Link from "next/link";
 import { CATEGORIES, UI, getType } from "@/lib/content";
 import { fill, localePath, type Lang } from "@/lib/i18n";
+import type { ChallengeResult } from "@/lib/challenge";
 import type { Analysis, ConsistencyLevel, ProfileKind } from "@/lib/scoring";
 import { OFFICIAL_TEST_URL } from "@/lib/site";
 import { AnimBar } from "./AnimBar";
+import { ChallengeCta, ChallengeResultView } from "./challenge/ChallengeResultView";
 import { CharacterSVG } from "./Illustrations";
 import { ShareButtons } from "./ShareButtons";
 import { TypeAccordion } from "./TypeAccordion";
 
-type Props = { analysis: Analysis; lang: Lang; shareUrl: string };
+type Props = { analysis: Analysis; lang: Lang; shareUrl: string; resultCode: string; challenge: ChallengeResult | null };
 
-export function ResultView({ analysis, lang, shareUrl }: Props) {
+export function ResultView({ analysis, lang, shareUrl, resultCode, challenge }: Props) {
   const u = UI[lang];
   const { pct, sorted, top: topIds, next: nextId, categories, profile, consistency, consistencyLevel } = analysis;
   const types = sorted.map((id) => ({ ...getType(id, lang), pct: pct[id] }));
@@ -108,6 +110,8 @@ export function ResultView({ analysis, lang, shareUrl }: Props) {
       </div>
 
       <TypeAccordion rows={types} lang={lang} />
+
+      {challenge ? <ChallengeResultView result={challenge} analysis={analysis} lang={lang} resultCode={resultCode} /> : <ChallengeCta lang={lang} resultCode={resultCode} />}
 
       <ShareButtons lang={lang} url={shareUrl} text={shareText} />
 
