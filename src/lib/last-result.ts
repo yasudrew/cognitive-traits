@@ -1,11 +1,14 @@
 import { useSyncExternalStore } from "react";
+import { decodeAnswers } from "./scoring";
 
 const KEY = "cognitive-traits:last-result";
 const EVENT = "last-result-change";
 
 const read = (): string | null => {
   try {
-    return window.localStorage.getItem(KEY);
+    const code = window.localStorage.getItem(KEY);
+    // 形式が変わった古いコードは結果を復元できないので無視する
+    return code && decodeAnswers(code) ? code : null;
   } catch {
     // プライベートモード等で使えない場合は「保存なし」として扱う
     return null;

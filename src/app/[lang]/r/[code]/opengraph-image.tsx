@@ -3,7 +3,7 @@ import { CharacterSVG } from "@/components/Illustrations";
 import { UI, getType } from "@/lib/content";
 import { isLang, type Lang } from "@/lib/i18n";
 import { OG_SIZE, loadOgFont } from "@/lib/og";
-import { MAX_PER_TYPE, decodeScores, rank, toPercent } from "@/lib/scoring";
+import { analyze, decodeAnswers } from "@/lib/scoring";
 
 export const size = OG_SIZE;
 export const contentType = "image/png";
@@ -12,12 +12,12 @@ export const alt = "認知特性診断の結果 | Cognitive Style result";
 export default async function Image({ params }: { params: Promise<{ lang: string; code: string }> }) {
   const { lang: raw, code } = await params;
   const lang: Lang = isLang(raw) ? raw : "ja";
-  const scores = decodeScores(code);
-  if (!scores) throw new Error(`Invalid result code for OG image: ${code}`);
+  const answers = decodeAnswers(code);
+  if (!answers) throw new Error(`Invalid result code for OG image: ${code}`);
   const u = UI[lang];
-  const { sorted, top } = rank(scores);
+  const { sorted, top, pct } = analyze(answers);
   const topTypes = top.map((id) => getType(id, lang));
-  const bars = sorted.map((id) => ({ ...getType(id, lang), pct: toPercent(scores[id], MAX_PER_TYPE) }));
+  const bars = sorted.map((id) => ({ ...getType(id, lang), pct: pct[id] }));
   const heading = topTypes.map((t) => t.label).join("・");
   const text = `${u.ogResultLead}${heading}${u.ogCta}${u.siteTitle}${bars.map((b) => `${b.label}${b.pct}%`).join("")}`;
   const [bold, black] = await Promise.all([loadOgFont(text, 700), loadOgFont(text, 900)]);

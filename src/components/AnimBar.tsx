@@ -3,9 +3,9 @@
 import { useEffect, useState } from "react";
 import { Dot } from "./Dot";
 
-type Props = { value: number; max: number; color: string; delay: number; label: string; pct: number };
+type Props = { value: number; max: number; color: string; delay: number; label: string; pct: number; avgMarker?: boolean };
 
-export function AnimBar({ value, max, color, delay, label, pct }: Props) {
+export function AnimBar({ value, max, color, delay, label, pct, avgMarker = false }: Props) {
   const [width, setWidth] = useState(0);
   const [show, setShow] = useState(false);
   useEffect(() => {
@@ -24,8 +24,9 @@ export function AnimBar({ value, max, color, delay, label, pct }: Props) {
         </span>
         <span style={{ fontSize: 17, fontWeight: 800, color, fontFeatureSettings: "'tnum'" }}>{pct}%</span>
       </div>
-      <div style={{ height: 8, background: "rgba(0,0,0,0.05)", borderRadius: 4, overflow: "hidden" }}>
+      <div style={{ position: "relative", height: 8, background: "rgba(0,0,0,0.05)", borderRadius: 4 }}>
         <div style={{ height: "100%", width: `${width}%`, background: color, borderRadius: 4, transition: "width 1s cubic-bezier(0.34,1.56,0.64,1)" }} />
+        {avgMarker && <span className="avg-line" aria-hidden />}
       </div>
     </div>
   );

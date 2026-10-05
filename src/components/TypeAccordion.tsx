@@ -4,23 +4,17 @@ import { useState } from "react";
 import Link from "next/link";
 import { UI, type TypeMeta, type TypeText } from "@/lib/content";
 import { localePath, type Lang } from "@/lib/i18n";
-import { MAX_PER_TYPE } from "@/lib/scoring";
+import { levelOf, type Level } from "@/lib/scoring";
 import { Dot } from "./Dot";
 import { CharacterSVG } from "./Illustrations";
 import { TypeDetail } from "./TypeDetail";
 
-type Row = TypeMeta & TypeText & { score: number };
+type Row = TypeMeta & TypeText & { pct: number };
 
 export function TypeAccordion({ rows, lang }: { rows: Row[]; lang: Lang }) {
   const u = UI[lang];
   const [openId, setOpenId] = useState<string | null>(null);
-  const level = (s: number) => {
-    const r = s / MAX_PER_TYPE;
-    if (r >= 0.84) return u.levelStrong;
-    if (r >= 0.64) return u.levelMod;
-    if (r >= 0.44) return u.levelAvg;
-    return u.levelLow;
-  };
+  const levelText: Record<Level, string> = { strong: u.levelStrong, mod: u.levelMod, avg: u.levelAvg, low: u.levelLow };
 
   return (
     <div className="card" style={{ padding: "12px 0" }}>
@@ -39,10 +33,10 @@ export function TypeAccordion({ rows, lang }: { rows: Row[]; lang: Lang }) {
               </div>
               <div style={{ textAlign: "right", marginRight: 4 }}>
                 <div style={{ fontSize: 16, fontWeight: 800, color: tp.color }}>
-                  {tp.score}
-                  <span style={{ fontSize: 11, fontWeight: 400, color: "var(--muted)" }}> / {MAX_PER_TYPE}</span>
+                  {tp.pct}
+                  <span style={{ fontSize: 11, fontWeight: 400, color: "var(--muted)" }}>%</span>
                 </div>
-                <div style={{ fontSize: 10, color: "var(--muted)" }}>{level(tp.score)}</div>
+                <div style={{ fontSize: 10, color: "var(--muted)" }}>{levelText[levelOf(tp.pct)]}</div>
               </div>
               <svg width="12" height="12" viewBox="0 0 12 12" style={{ transition: "transform .3s", transform: open ? "rotate(180deg)" : "rotate(0)", flexShrink: 0 }}>
                 <path d="M2 4.5L6 8.5L10 4.5" stroke="#999" strokeWidth="1.5" fill="none" strokeLinecap="round" />

@@ -1,25 +1,37 @@
 import Link from "next/link";
 import { CATEGORIES, UI, getType } from "@/lib/content";
 import { fill, localePath, type Lang } from "@/lib/i18n";
-import { MAX_PER_TYPE, rank, toPercent, type Scores } from "@/lib/scoring";
+import type { Analysis, ConsistencyLevel, ProfileKind } from "@/lib/scoring";
 import { OFFICIAL_TEST_URL } from "@/lib/site";
 import { AnimBar } from "./AnimBar";
 import { CharacterSVG } from "./Illustrations";
 import { ShareButtons } from "./ShareButtons";
 import { TypeAccordion } from "./TypeAccordion";
 
-type Props = { scores: Scores; lang: Lang; shareUrl: string };
+type Props = { analysis: Analysis; lang: Lang; shareUrl: string };
 
-export function ResultView({ scores, lang, shareUrl }: Props) {
+export function ResultView({ analysis, lang, shareUrl }: Props) {
   const u = UI[lang];
-  const { sorted, top: topIds, next: nextId } = rank(scores);
-  const types = sorted.map((id) => ({ ...getType(id, lang), score: scores[id] }));
+  const { pct, sorted, top: topIds, next: nextId, categories, profile, consistency, consistencyLevel } = analysis;
+  const types = sorted.map((id) => ({ ...getType(id, lang), pct: pct[id] }));
   const topTypes = types.filter((t) => topIds.includes(t.id));
   const top = topTypes[0];
   const next = nextId ? getType(nextId, lang) : null;
   const single = topTypes.length === 1;
   const topLabels = topTypes.map((t) => t.label).join("・");
   const shareText = fill(single ? u.shareText : u.shareTextTied, topLabels);
+
+  const profileText: Record<ProfileKind, { title: string; desc: string }> = {
+    single: { title: u.profileSingle, desc: fill(u.profileSingleDesc, top.label) },
+    mixed: { title: u.profileMixed, desc: u.profileMixedDesc },
+    balanced: { title: u.profileBalanced, desc: u.profileBalancedDesc },
+  };
+  const consistencyText: Record<ConsistencyLevel, { title: string; desc: string; color: string }> = {
+    high: { title: u.consistencyHigh, desc: u.consistencyHighDesc, color: "#178F5E" },
+    mid: { title: u.consistencyMid, desc: u.consistencyMidDesc, color: "#C87620" },
+    low: { title: u.consistencyLow, desc: u.consistencyLowDesc, color: "#D94F3B" },
+  };
+  const cons = consistencyText[consistencyLevel];
 
   return (
     <div className="fadein" style={{ paddingTop: 32, paddingBottom: 40 }}>
@@ -47,26 +59,67 @@ export function ResultView({ scores, lang, shareUrl }: Props) {
         <p style={{ fontSize: 14, color: "var(--sub)" }}>{single ? u.resultYourTop : fill(u.resultTied, topTypes.length)}</p>
       </div>
 
-      <ShareButtons lang={lang} url={shareUrl} text={shareText} />
+      <div className="card">
+        <h2 className="section-title">{u.profileTitle}</h2>
+        <p style={{ textAlign: "center", fontSize: 20, fontWeight: 900, marginBottom: 8 }}>{profileText[profile].title}</p>
+        <p style={{ fontSize: 13, color: "var(--sub)", lineHeight: 1.8 }}>{profileText[profile].desc}</p>
+      </div>
 
       <div className="card">
         <h2 className="section-title">{u.scoreTitle}</h2>
         {types.map((tp, i) => (
-          <AnimBar key={tp.id} value={tp.score} max={MAX_PER_TYPE} color={tp.color} delay={i * 100} label={tp.label} pct={toPercent(tp.score, MAX_PER_TYPE)} />
+          <AnimBar key={tp.id} value={tp.pct} max={100} color={tp.color} delay={i * 100} label={tp.label} pct={tp.pct} avgMarker />
         ))}
-        <p style={{ fontSize: 11, color: "var(--muted)", textAlign: "center", marginTop: 4 }}>{u.maxNote}</p>
+        <p style={{ fontSize: 11, color: "var(--muted)", textAlign: "center", marginTop: 4 }}>
+          <span style={{ display: "inline-block", width: 1.5, height: 10, background: "rgba(0,0,0,0.25)", marginRight: 6, verticalAlign: "middle" }} />
+          {u.maxNote}
+        </p>
       </div>
 
       <div className="card">
         <h2 className="section-title">{u.catTitle}</h2>
-        {CATEGORIES.map((cat, i) => {
-          const cs = cat.ids.reduce((s, id) => s + scores[id], 0);
-          const max = MAX_PER_TYPE * cat.ids.length;
-          return <AnimBar key={cat.id} value={cs} max={max} color={cat.color} delay={700 + i * 120} label={cat.label[lang]} pct={toPercent(cs, max)} />;
+        {categories.map((c, i) => {
+          const meta = CATEGORIES.find((x) => x.id === c.id);
+          if (!meta) throw new Error(`Unknown category: ${c.id}`);
+          return <AnimBar key={c.id} value={c.pct} max={100} color={meta.color} delay={700 + i * 120} label={meta.label[lang]} pct={c.pct} avgMarker />;
+        })}
+        <h3 className="section-title" style={{ marginTop: 20, marginBottom: 12 }}>{u.withinTitle}</h3>
+        {categories.map((c) => {
+          const meta = CATEGORIES.find((x) => x.id === c.id);
+          if (!meta) throw new Error(`Unknown category: ${c.id}`);
+          const [x, y] = meta.ids.map((id) => getType(id, lang));
+          return (
+            <div key={c.id} style={{ marginBottom: 14 }}>
+              <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, fontWeight: 700 }}>
+                <span style={{ color: x.color }}>
+                  {x.label} {c.firstShare}
+                </span>
+                <span style={{ color: y.color }}>
+                  {100 - c.firstShare} {y.label}
+                </span>
+              </div>
+              <div className="split">
+                <div style={{ width: `${c.firstShare}%`, background: x.color }} />
+                <div style={{ flex: 1, background: y.color }} />
+              </div>
+            </div>
+          );
         })}
       </div>
 
       <TypeAccordion rows={types} lang={lang} />
+
+      <ShareButtons lang={lang} url={shareUrl} text={shareText} />
+
+      <div className="card">
+        <h2 className="section-title">{u.consistencyTitle}</h2>
+        <p style={{ textAlign: "center", marginBottom: 8 }}>
+          <span className="badge" style={{ color: cons.color, background: `${cons.color}14` }}>
+            {cons.title}・{consistency}%
+          </span>
+        </p>
+        <p style={{ fontSize: 13, color: "var(--sub)", lineHeight: 1.8 }}>{cons.desc}</p>
+      </div>
 
       <div className="card" style={{ background: single ? top.bg : "var(--surface)", borderColor: single ? `${top.color}18` : "var(--border)" }}>
         <p style={{ fontSize: 14, fontWeight: 700, color: single ? top.color : "var(--text)", marginBottom: 8 }}>{u.adviceTitle}</p>
