@@ -98,3 +98,9 @@ a.primary-btn,a.secondary-btn,a.nav-link,a.nav-logo{text-decoration:none}
 .mem-option:hover{border-color:var(--text);transform:translateY(-1px)}
 .countdown{height:3px;background:var(--text);border-radius:2px;margin:0 auto 16px;max-width:300px;transform-origin:left;animation:countdown linear forwards}
 @keyframes countdown{from{transform:scaleX(1)}to{transform:scaleX(0)}}
+.guide-grid{display:grid;grid-template-columns:1fr;gap:12px}
+@media(min-width:768px){.guide-grid{grid-template-columns:1fr 1fr}}
+.guide-block{border:1px solid;border-radius:10px;padding:14px 16px;background:rgba(0,0,0,0.012)}
+.guide-block ul{list-style:none;display:flex;flex-direction:column;gap:6px}
+.guide-block li{position:relative;padding-left:14px;font-size:13px;line-height:1.75;color:var(--sub)}
+.guide-block li::before{content:"";position:absolute;left:2px;top:.75em;width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.45}

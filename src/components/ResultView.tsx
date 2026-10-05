@@ -9,6 +9,8 @@ import { ChallengeCta, ChallengeResultView } from "./challenge/ChallengeResultVi
 import { CharacterSVG } from "./Illustrations";
 import { ShareButtons } from "./ShareButtons";
 import { TypeAccordion } from "./TypeAccordion";
+import { TypeGuideView } from "./TypeGuideView";
+import { GUIDE_LABELS } from "@/lib/guides";
 
 type Props = { analysis: Analysis; lang: Lang; shareUrl: string; resultCode: string; challenge: ChallengeResult | null };
 
@@ -108,6 +110,10 @@ export function ResultView({ analysis, lang, shareUrl, resultCode, challenge }: 
           );
         })}
       </div>
+
+      {topTypes.map((tp) => (
+        <TypeGuideView key={tp.id} id={tp.id} lang={lang} heading={GUIDE_LABELS[lang].forYou} />
+      ))}
 
       <TypeAccordion rows={types} lang={lang} />
 

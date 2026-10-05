@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CharacterSVG } from "@/components/Illustrations";
-import { TypeDetail } from "@/components/TypeDetail";
+import { TypeGuideView } from "@/components/TypeGuideView";
+import { GUIDES } from "@/lib/guides";
 import { TYPE_IDS, UI, getType, isTypeId } from "@/lib/content";
 import { isLang, localePath } from "@/lib/i18n";
 import { alternates } from "@/lib/site";
@@ -16,7 +17,7 @@ export async function generateMetadata({ params }: PageProps<"/[lang]/types/[id]
   const tp = getType(id, lang);
   return {
     title: lang === "ja" ? `${tp.label}（${tp.category}）` : `${tp.label} (${tp.category})`,
-    description: tp.desc,
+    description: GUIDES[id][lang].summary,
     alternates: alternates(lang, `/types/${id}`),
   };
 }
@@ -37,10 +38,7 @@ export default async function TypeDetailPage({ params }: PageProps<"/[lang]/type
         <h1 className="result-top-label" style={{ fontSize: 26, fontWeight: 900, color: tp.color, marginBottom: 4 }}>{tp.label}</h1>
         <p style={{ fontSize: 13, color: "var(--muted)" }}>{tp.sub}</p>
       </div>
-      <div className="card">
-        <p className="about-body" style={{ fontSize: 14, color: "var(--sub)", lineHeight: 2, marginBottom: 16 }}>{tp.desc}</p>
-        <TypeDetail type={tp} lang={lang} />
-      </div>
+      <TypeGuideView id={id} lang={lang} />
       <div style={{ textAlign: "center", margin: "24px 0 36px" }}>
         <Link className="primary-btn" href={localePath(lang, "/quiz")}>
           {u.tryBtn}
