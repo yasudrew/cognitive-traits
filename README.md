@@ -15,7 +15,7 @@
 
 ## Tech Stack
 
-- React + Vite
+- Next.js 16（App Router / SSG）+ TypeScript
 - Vercel (hosting)
 
 ## Development
@@ -25,6 +25,26 @@ npm install
 npm run dev
 ```
 
+本番URLは環境変数 `NEXT_PUBLIC_SITE_URL` で指定する（未設定時は `https://cognitive-traits.vercel.app`）。canonical・OG画像・sitemap がこの値を使う。
+
+## URL構成
+
+| パス | 内容 |
+|------|------|
+| `/` | トップ（日本語。英語は `/en` を前に付ける） |
+| `/quiz` | 診断 |
+| `/r/{code}` | 診断結果（スコアをコード化した共有用URL。noindex） |
+| `/types` `/types/{id}` | タイプ一覧・タイプ別ページ |
+| `/about` | 認知特性とは |
+
+日本語ページは `src/proxy.ts` で `/ja/...` に内部 rewrite している。
+
+## ディレクトリ
+
+- `src/lib/content.ts` — 設問・タイプ説明・UI文言（日英）
+- `src/lib/scoring.ts` — 採点と結果コードのエンコード／デコード
+- `src/app/[lang]/` — 各ページと OG 画像
+
 ## 参考
 
-本田真美先生の認知特性理論（本田40式認知特性テスト）を参考にしたオリジナル版です。
+本田真美氏の認知特性理論（本田40式認知特性テスト）を参考に、独自の設問で作成した非公式版です。本田式認知特性研究所とは関係ありません。
