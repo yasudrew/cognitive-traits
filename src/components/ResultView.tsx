@@ -4,6 +4,7 @@ import { fill, localePath, type Lang } from "@/lib/i18n";
 import type { ChallengeResult } from "@/lib/challenge";
 import type { Analysis, ConsistencyLevel, ProfileKind } from "@/lib/scoring";
 import { OFFICIAL_TEST_URL } from "@/lib/site";
+import { SITE_TEXT } from "@/lib/site-text";
 import { AnimBar } from "./AnimBar";
 import { ChallengeCta, ChallengeResultView } from "./challenge/ChallengeResultView";
 import { CharacterSVG } from "./Illustrations";
@@ -12,10 +13,13 @@ import { TypeAccordion } from "./TypeAccordion";
 import { TypeGuideView } from "./TypeGuideView";
 import { GUIDE_LABELS } from "@/lib/guides";
 
+const TOC_KEYS = ["profile", "scores", "categories", "guide", "details", "challenge", "share"] as const;
+
 type Props = { analysis: Analysis; lang: Lang; shareUrl: string; resultCode: string; challenge: ChallengeResult | null };
 
 export function ResultView({ analysis, lang, shareUrl, resultCode, challenge }: Props) {
   const u = UI[lang];
+  const t = SITE_TEXT[lang];
   const { pct, sorted, top: topIds, next: nextId, categories, profile, consistency, consistencyLevel } = analysis;
   const types = sorted.map((id) => ({ ...getType(id, lang), pct: pct[id] }));
   const topTypes = types.filter((t) => topIds.includes(t.id));
@@ -63,13 +67,21 @@ export function ResultView({ analysis, lang, shareUrl, resultCode, challenge }: 
         <p style={{ fontSize: 14, color: "var(--sub)" }}>{single ? u.resultYourTop : fill(u.resultTied, topTypes.length)}</p>
       </div>
 
-      <div className="card">
+      <nav className="toc" aria-label={t.tocTitle}>
+        {TOC_KEYS.map((k) => (
+          <a key={k} href={`#${k}`}>
+            {t.toc[k]}
+          </a>
+        ))}
+      </nav>
+
+      <div className="card" id="profile">
         <h2 className="section-title">{u.profileTitle}</h2>
         <p style={{ fontSize: 24, fontWeight: 700, color: "var(--brand)", marginBottom: 8 }}>{profileText[profile].title}</p>
         <p style={{ fontSize: 14, color: "var(--sub)", lineHeight: 1.8 }}>{profileText[profile].desc}</p>
       </div>
 
-      <div className="card">
+      <div className="card" id="scores">
         <h2 className="section-title">{u.scoreTitle}</h2>
         {types.map((tp, i) => (
           <AnimBar key={tp.id} value={tp.pct} max={100} color={tp.color} delay={i * 100} label={tp.label} pct={tp.pct} avgMarker />
@@ -80,7 +92,7 @@ export function ResultView({ analysis, lang, shareUrl, resultCode, challenge }: 
         </p>
       </div>
 
-      <div className="card">
+      <div className="card" id="categories">
         <h2 className="section-title">{u.catTitle}</h2>
         {categories.map((c, i) => {
           const meta = CATEGORIES.find((x) => x.id === c.id);
@@ -111,15 +123,23 @@ export function ResultView({ analysis, lang, shareUrl, resultCode, challenge }: 
         })}
       </div>
 
-      {topTypes.map((tp) => (
-        <TypeGuideView key={tp.id} id={tp.id} lang={lang} heading={GUIDE_LABELS[lang].forYou} />
-      ))}
+      <div id="guide">
+        {topTypes.map((tp) => (
+          <TypeGuideView key={tp.id} id={tp.id} lang={lang} heading={GUIDE_LABELS[lang].forYou} />
+        ))}
+      </div>
 
-      <TypeAccordion rows={types} lang={lang} />
+      <div id="details">
+        <TypeAccordion rows={types} lang={lang} />
+      </div>
 
-      {challenge ? <ChallengeResultView result={challenge} analysis={analysis} lang={lang} resultCode={resultCode} /> : <ChallengeCta lang={lang} resultCode={resultCode} />}
+      <div id="challenge">
+        {challenge ? <ChallengeResultView result={challenge} analysis={analysis} lang={lang} resultCode={resultCode} /> : <ChallengeCta lang={lang} resultCode={resultCode} />}
+      </div>
 
-      <ShareButtons lang={lang} url={shareUrl} text={shareText} />
+      <div id="share">
+        <ShareButtons lang={lang} url={shareUrl} text={shareText} />
+      </div>
 
       <div className="card">
         <h2 className="section-title">{u.consistencyTitle}</h2>

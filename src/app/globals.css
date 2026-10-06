@@ -135,6 +135,50 @@ a{color:inherit}
 .countdown{height:4px;background:var(--brand);border-radius:var(--r-full);margin:0 auto 16px;max-width:300px;transform-origin:left;animation:countdown linear forwards}
 @keyframes countdown{from{transform:scaleX(1)}to{transform:scaleX(0)}}
 
+/* ═══ トップのセクション ═══ */
+.home-section{margin-top:64px}
+.home-h2{font-size:24px;font-weight:700;line-height:1.4;margin-bottom:8px}
+.home-lead{font-size:16px;color:var(--sub);margin-bottom:24px}
+.feature-list{display:grid;gap:16px}
+.feature-card{margin-bottom:0}
+.feature-num{display:block;font-size:14px;font-weight:700;color:var(--brand);letter-spacing:.08em;margin-bottom:8px}
+.steps{list-style:none;display:grid;gap:16px;counter-reset:none}
+.step{display:flex;gap:16px;align-items:flex-start;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:16px 24px}
+.step-num{flex-shrink:0;width:32px;height:32px;border-radius:50%;background:var(--brand);color:#fff;font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:2px}
+.faq{border-top:1px solid var(--border)}
+.faq details{border-bottom:1px solid var(--border)}
+.faq summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;gap:16px;padding:16px 0;font-size:16px;font-weight:700}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"＋";color:var(--brand);font-weight:700;flex-shrink:0}
+.faq details[open] summary::after{content:"－"}
+.faq details p{font-size:14px;color:var(--sub);padding:0 0 16px}
+.final-cta{text-align:center;background:var(--brand-soft);border-radius:var(--r-lg);padding:40px 24px}
+
+/* ═══ 回答の再開・キーボード ═══ */
+.resume{background:var(--surface);border:1px solid var(--brand);border-radius:var(--r-lg);padding:24px;margin-bottom:24px}
+.resume-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.key-hint{display:none;font-size:12px;color:var(--muted);margin-top:16px}
+
+/* ═══ 結果の目次 ═══ */
+.toc{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 12px;margin-bottom:8px;scrollbar-width:none}
+.toc::-webkit-scrollbar{display:none}
+.toc a{flex-shrink:0;font-size:14px;color:var(--brand-hover);text-decoration:none;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-full);padding:6px 14px;transition:background .15s,border-color .15s}
+.toc a:hover{background:var(--brand-soft);border-color:var(--brand)}
+[id]{scroll-margin-top:16px}
+
+/* ═══ フッター・規約ページ ═══ */
+.footer-nav{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 24px;margin-bottom:16px}
+.footer-nav a{font-size:14px;color:var(--sub);text-decoration:none}
+.footer-nav a:hover{text-decoration:underline}
+.doc h1{font-size:32px;font-weight:700;line-height:1.4;margin-bottom:24px}
+.doc h2{font-size:20px;font-weight:700;margin:40px 0 8px}
+.doc p,.doc li{font-size:16px;color:var(--sub)}
+.doc ul{padding-left:24px;display:grid;gap:4px}
+.doc dl{display:grid;grid-template-columns:8em 1fr;border-top:1px solid var(--border)}
+.doc dt,.doc dd{padding:12px 0;border-bottom:1px solid var(--border);font-size:16px}
+.doc dt{font-weight:700}
+.todo{background:#FFF6DC;padding:0 4px;border-radius:4px}
+
 /* ═══ PC ═══ */
 @media(min-width:768px){
   .sp-only{display:none}
@@ -150,6 +194,10 @@ a{color:inherit}
   .card{padding:32px;margin-bottom:24px}
   .accordion-row{padding:16px 32px}
   .type-grid,.guide-grid{grid-template-columns:1fr 1fr}
+  .feature-list{grid-template-columns:repeat(3,1fr)}
+  .home-h2{font-size:32px}
+  .key-hint{display:block}
+  .final-cta{padding:64px 40px}
   .pair-card{font-size:16px;padding:40px 24px 24px}
   .quiz-note{font-size:14px}
   .scale{margin:32px 40px 8px}
