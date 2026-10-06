@@ -209,7 +209,17 @@ a{color:inherit}
   .result-top-label{font-size:40px!important}
   .about-body{font-size:16px!important}
 }
-@media(min-width:1024px){.container{max-width:768px}}
+@media(min-width:1024px){
+  .container{max-width:768px}
+  /* トップだけは一覧を広く見せるため、ナビ・フッターごと幅を広げる */
+  .container:has(.home-page){max-width:1120px}
+  .home-page .hero-sub{max-width:720px!important}
+  .home-page .type-grid,.home-page .steps{grid-template-columns:repeat(3,1fr)}
+  .home-page .step{flex-direction:column;gap:12px}
+  .home-page .faq{max-width:800px}
+  .home-page .char-row{padding:24px 48px 16px}
+  .home-page .char-row>div{width:12%}
+}
 
 /* ═══ 収益化（同意バナー・広告・おすすめ） ═══ */
 .consent{position:fixed;left:16px;right:16px;bottom:16px;z-index:200;max-width:640px;margin:0 auto;background:var(--surface);border:1px solid var(--border-strong);border-radius:var(--r-lg);padding:16px 24px;box-shadow:0 2px 8px 1px rgba(0,0,0,.1),0 1px 5px 0 rgba(0,0,0,.3)}

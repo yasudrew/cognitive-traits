@@ -1,19 +1,22 @@
+"use client";
+
 import Script from "next/script";
-import { ADSENSE_CLIENT, CONSENT_STORAGE_KEY, GA_ID } from "@/lib/monetize-config";
+import { useConsent } from "@/lib/consent";
+import { ADSENSE_CLIENT, GA_ID } from "@/lib/monetize-config";
 
 /**
- * GA4 と AdSense の読み込み。Consent Mode v2 で「既定は拒否」にし、
- * 以前に同意済みならその場で許可に切り替えてから計測を始める。
+ * GA4 と AdSense の読み込み。
+ * GA4 はバナーで「同意する」を選んだ人にだけ読み込む（同意前・拒否時は Google に何も送らない）。
+ * AdSense は同意がなければ非パーソナライズ広告として配信する（AdSlot 側で指定）。
  */
 export function Analytics() {
+  const consent = useConsent();
   return (
     <>
-      {GA_ID && (
+      {GA_ID && consent === "granted" && (
         <>
-          <Script id="ga-consent" strategy="afterInteractive">
+          <Script id="ga-init" strategy="afterInteractive">
             {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
-gtag('consent','default',{analytics_storage:'denied',ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',wait_for_update:500});
-try{if(localStorage.getItem(${JSON.stringify(CONSENT_STORAGE_KEY)})==='granted'){gtag('consent','update',{analytics_storage:'granted',ad_storage:'granted',ad_user_data:'granted',ad_personalization:'granted'});}}catch(e){}
 gtag('js',new Date());gtag('config',${JSON.stringify(GA_ID)});`}
           </Script>
           <Script id="ga" src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`} strategy="afterInteractive" />

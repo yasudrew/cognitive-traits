@@ -23,7 +23,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
   };
 
   return (
-    <div className="fadein">
+    <div className="fadein home-page">
       <section className="hero-top" style={{ paddingTop: 64, paddingBottom: 16 }}>
         <p className="eyebrow">{u.heroSub}</p>
         <h1 className="hero-title" style={{ fontSize: 32, fontWeight: 700, color: "var(--text)", lineHeight: 1.3, marginBottom: 16 }}>
