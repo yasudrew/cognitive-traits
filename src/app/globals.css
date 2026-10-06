@@ -140,8 +140,9 @@ a{color:inherit}
 
 /* ═══ トップのセクション ═══ */
 .home-section{margin-top:64px}
-.home-h2{font-size:24px;font-weight:700;line-height:1.4;margin-bottom:8px}
+.home-h2{font-size:24px;font-weight:700;line-height:1.4;margin-bottom:16px}
 .home-lead{font-size:16px;color:var(--sub);margin-bottom:24px}
+.home-h2:has(+ .home-lead){margin-bottom:8px}
 .feature-list{display:grid;gap:16px}
 .feature-card{margin-bottom:0}
 .feature-num{display:block;font-size:14px;font-weight:700;color:var(--brand);letter-spacing:.08em;margin-bottom:8px}
@@ -198,7 +199,7 @@ a{color:inherit}
   .accordion-row{padding:16px 32px}
   .type-grid,.guide-grid{grid-template-columns:1fr 1fr}
   .feature-list{grid-template-columns:repeat(3,1fr)}
-  .home-h2{font-size:32px}
+  .home-h2{font-size:32px;margin-bottom:24px}
   .key-hint{display:block}
   .final-cta{padding:64px 40px}
   .pair-card{font-size:16px;padding:40px 24px 24px}
@@ -210,9 +211,9 @@ a{color:inherit}
   .home-page .hero-sub{margin-left:auto;margin-right:auto}
   .faq-section .home-h2{text-align:center}
   .faq-section .faq{max-width:800px;margin:0 auto}
-  .cat-card{padding:32px 16px}
-  .cat-icon svg{width:64px;height:64px}
-  .cat-icon{margin-bottom:16px}
+  .cat-card{padding:20px 16px}
+  .cat-icon svg{width:56px;height:56px}
+  .cat-icon{margin-bottom:8px}
   .cat-label{font-size:20px}
   .cat-sub{font-size:14px;margin-top:4px}
   .hero-top{padding-top:96px!important;padding-bottom:64px!important}
