@@ -99,44 +99,65 @@ const PARTS: Record<TypeId, Parts> = {
       </g>
     ),
   },
-  /* 3D: ツンツン頭で、片手に立方体を持ち上げる */
+  /* 3D: ツンツン頭で、回転する立方体を片手で掲げる（頭の中で立体を回すイメージ） */
   "3d": {
     color: "#C87620",
     hair: <path d="M37 42 Q36 18 60 17 Q84 18 83 42 Q80 31 73 29 L69 34 L64 27 L58 33 L52 27 L47 34 Q40 35 37 42 Z" fill="#2F2F38" />,
     arms: (
       <g>
         {arm("#C87620", 46, 72, 39, 91)}
-        {arm("#C87620", 74, 71, 90, 60)}
+        {arm("#C87620", 74, 71, 90, 55)}
       </g>
     ),
     prop: (
       <g>
-        <path d="M95 30 L107 36 L95 42 L83 36 Z" fill="#F2B866" />
-        <path d="M83 36 L95 42 L95 56 L83 50 Z" fill="#C87620" />
-        <path d="M95 42 L107 36 L107 50 L95 56 Z" fill="#9A5A16" />
-        <circle cx={90} cy={60} r={4.6} fill={SKIN} />
+        <path d="M83 32 A16 6 0 0 1 115 32" stroke="#C87620" strokeWidth={2} strokeLinecap="round" fill="none" opacity={0.45} />
+        <path d="M99 17 L109 22.5 L99 28 L89 22.5 Z" fill="#F2B866" />
+        <path d="M89 22.5 L99 28 L99 40 L89 34.5 Z" fill="#C87620" />
+        <path d="M99 28 L109 22.5 L109 34.5 L99 40 Z" fill="#9A5A16" />
+        <path d="M115 32 A16 6 0 0 1 87 36.5" stroke="#C87620" strokeWidth={2.2} strokeLinecap="round" fill="none" />
+        <path d="M84 33.5 L89.5 34 L86.5 39.5 Z" fill="#C87620" />
+        <circle cx={90} cy={55} r={4.6} fill={SKIN} />
       </g>
     ),
   },
-  /* ファンタジー: 長い髪で、上を見上げて空想のふきだしを浮かべる */
+  /* ファンタジー: 手紙の文字を読みながら、頭の上に景色の映像を思い浮かべる（言葉→映像） */
   fantasy: {
     color: "#2968B0",
     back: <path d="M35 42 Q35 16 60 16 Q85 16 85 42 L87 78 Q87 82 83 82 L37 82 Q33 82 33 78 Z" fill="#8A5A3C" />,
     hair: <path d="M37 42 Q38 18 62 18 Q84 20 83 40 Q71 36 59 26 Q51 37 37 42 Z" fill="#8A5A3C" />,
     eyes: (
       <g>
-        <ellipse cx={53} cy={44} rx={2.7} ry={3.2} fill={INK} />
-        <ellipse cx={69} cy={44} rx={2.7} ry={3.2} fill={INK} />
-        <circle cx={54} cy={42.6} r={0.9} fill="#fff" />
-        <circle cx={70} cy={42.6} r={0.9} fill="#fff" />
+        <ellipse cx={53} cy={45} rx={2.7} ry={3.2} fill={INK} />
+        <ellipse cx={69} cy={45} rx={2.7} ry={3.2} fill={INK} />
+        <circle cx={54.2} cy={43.4} r={1} fill="#fff" />
+        <circle cx={70.2} cy={43.4} r={1} fill="#fff" />
+      </g>
+    ),
+    arms: (
+      <g>
+        {arm("#2968B0", 46, 72, 40, 84)}
+        {arm("#2968B0", 74, 72, 81, 91)}
       </g>
     ),
     prop: (
       <g>
-        <circle cx={86} cy={24} r={2.5} fill="#fff" stroke="#2968B0" strokeWidth={1.4} />
-        <circle cx={92} cy={16} r={3.6} fill="#fff" stroke="#2968B0" strokeWidth={1.4} />
-        <ellipse cx={104} cy={8} rx={12} ry={7.5} fill="#fff" stroke="#2968B0" strokeWidth={1.4} />
-        <path d="M104 3.5 L105.4 6.6 L108.6 6.9 L106.2 9 L106.9 12.2 L104 10.5 L101.1 12.2 L101.8 9 L99.4 6.9 L102.6 6.6 Z" fill="#F2B866" />
+        <rect x={26} y={74} width={17} height={21} rx={2} fill="#fff" stroke="#2968B0" strokeWidth={1.4} transform="rotate(-8 34.5 84.5)" />
+        <path d="M30 80 L40 78.6 M30.6 84 L40.6 82.6 M31.2 88 L38.2 87" stroke="#2968B0" strokeWidth={1.3} strokeLinecap="round" opacity={0.6} />
+        <circle cx={40} cy={84} r={4.6} fill={SKIN} />
+        <circle cx={83.5} cy={30} r={1.8} fill="#fff" stroke="#2968B0" strokeWidth={1.2} />
+        <circle cx={87.5} cy={24.5} r={2.6} fill="#fff" stroke="#2968B0" strokeWidth={1.2} />
+        <circle cx={93} cy={18} r={7.2} fill="#2968B0" />
+        <circle cx={101} cy={12} r={8} fill="#2968B0" />
+        <circle cx={109} cy={18} r={6.8} fill="#2968B0" />
+        <circle cx={101} cy={22} r={7.2} fill="#2968B0" />
+        <circle cx={93} cy={18} r={5.9} fill="#EEF5FF" />
+        <circle cx={101} cy={12} r={6.7} fill="#EEF5FF" />
+        <circle cx={109} cy={18} r={5.5} fill="#EEF5FF" />
+        <circle cx={101} cy={22} r={5.9} fill="#EEF5FF" />
+        <circle cx={105} cy={12} r={2.4} fill="#F2B866" />
+        <path d="M92 22.5 L97 15.5 L100.5 20 L103.5 16.5 L109 22.5 Z" fill="#2968B0" opacity={0.85} />
+        <path d="M97 15.5 L98.6 17.8 L95.4 17.8 Z" fill="#fff" />
       </g>
     ),
   },
