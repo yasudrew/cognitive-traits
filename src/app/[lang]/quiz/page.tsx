@@ -1,0 +1,18 @@
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { Quiz } from "@/components/Quiz";
+import { UI } from "@/lib/content";
+import { isLang } from "@/lib/i18n";
+import { alternates } from "@/lib/site";
+
+export async function generateMetadata({ params }: PageProps<"/[lang]/quiz">): Promise<Metadata> {
+  const { lang } = await params;
+  if (!isLang(lang)) return {};
+  return { title: UI[lang].startBtn, alternates: alternates(lang, "/quiz") };
+}
+
+export default async function QuizPage({ params }: PageProps<"/[lang]/quiz">) {
+  const { lang } = await params;
+  if (!isLang(lang)) notFound();
+  return <Quiz lang={lang} />;
+}

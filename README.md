@@ -1,6 +1,8 @@
 # 🧠 認知特性診断 | Cognitive Style Assessment
 
-30の質問に5段階で回答すると、あなたの認知特性が6タイプの割合で分かる診断ツールです。
+6タイプのうち2つを比べる質問30問に5段階で答えると、あなたの認知特性が分かる診断ツールです。全15通りの組み合わせを2問ずつ比べ、「できる・得意」ではなく「自然にそうなるか」を聞くことで、経験や訓練の影響を減らしています。
+
+任意の「精密チャレンジ」（図形回転・見た目の記憶・イメージの鮮明さ、約3分）で実際の処理を測り、自己申告の結果と並べて比較できます。
 
 ## 6つの認知特性タイプ
 
@@ -15,7 +17,7 @@
 
 ## Tech Stack
 
-- React + Vite
+- Next.js 16（App Router / SSG）+ TypeScript
 - Vercel (hosting)
 
 ## Development
@@ -25,6 +27,33 @@ npm install
 npm run dev
 ```
 
+本番URLは環境変数 `NEXT_PUBLIC_SITE_URL` で指定する（未設定時は `https://cognitive-traits.vercel.app`）。canonical・OG画像・sitemap がこの値を使う。
+
+## URL構成
+
+| パス | 内容 |
+|------|------|
+| `/` | トップ（日本語。英語は `/en` を前に付ける） |
+| `/quiz` | 診断 |
+| `/r/{code}` | 診断結果（30問の回答をコード化した共有用URL。noindex） |
+| `/r/{code}?x={challenge}` | 精密チャレンジの結果を含む診断結果 |
+| `/challenge?r={code}` | 精密チャレンジ（本診断の結果コードを引き継ぐ） |
+| `/types` `/types/{id}` | タイプ一覧・タイプ別ページ |
+| `/about` | 認知特性とは |
+| `/privacy` `/operator` | プライバシーポリシー・運営者情報（`src/lib/legal-text.ts` の【要記入】を埋めるまで noindex） |
+
+日本語ページは `src/proxy.ts` で `/ja/...` に内部 rewrite している。
+
+## ディレクトリ
+
+- `src/lib/questions.ts` — 設問（日英）と設計方針
+- `src/lib/content.ts` — タイプ説明・UI文言（日英）
+- `src/lib/scoring.ts` — 採点・プロフィール判定・回答の一貫性、結果コードのエンコード／デコード
+- `src/lib/challenge.ts` — 精密チャレンジの課題生成・採点・結果コード
+- `src/lib/guides.ts` — タイプ別の詳しい解説（日英）
+- `src/lib/site-text.ts` / `src/lib/legal-text.ts` — トップ・FAQ・規約ページの文言
+- `src/app/[lang]/` — 各ページと OG 画像
+
 ## 参考
 
-本田真美先生の認知特性理論（本田40式認知特性テスト）を参考にしたオリジナル版です。
+本田真美氏の認知特性理論（本田40式認知特性テスト）を参考に、独自の設問で作成した非公式版です。本田式認知特性研究所とは関係ありません。
