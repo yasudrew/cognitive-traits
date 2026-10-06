@@ -1,5 +1,6 @@
 import type { TypeId } from "./content";
 import { TYPE_IDS } from "./content";
+import type { Lang } from "./i18n";
 
 /* ═══ 図形回転（3D の実測） ═══
  * Shepard & Metzler 型の心的回転課題。左右の立体が「同じ形を回したもの」か「鏡像」かを判断する。
@@ -89,6 +90,47 @@ export const VIVIDNESS_MAX = 5;
 /** タイプごとに1問。回答は 1（まったく浮かばない）〜5（実物と同じくらい鮮明） */
 export const VIVIDNESS_ITEMS: readonly TypeId[] = TYPE_IDS;
 
+/* ═══ 耳と目の単語記憶（ラジオ・辞書 の実測） ═══
+ * 6語を文字で見せ、別の6語を音声で聞かせたあと、新しい6語を混ぜた18語から出てきた語を選ばせる。
+ * 耳から入れた語と目から入れた語の残りやすさを比べる。
+ */
+
+export const WORDS_PER_LIST = 6;
+export const WORD_SHOW_MS = 1_500;
+export const WORD_GAP_MS = 600;
+
+/** 身近で絵にしやすい名詞。音や形が似た語は入れない */
+const WORD_POOL: Record<Lang, readonly string[]> = {
+  ja: ["りんご", "えんぴつ", "かさ", "くつした", "ふうせん", "はさみ", "めがね", "たいこ", "ぼうし", "きって", "まくら", "ふくろう", "にんじん", "かがみ", "ろうそく", "はしご", "ほうき", "つくえ", "たまご", "うちわ", "ちょうちょ", "すいか", "とけい", "かばん", "いちご", "くじら", "らっぱ", "ふね", "こま", "やかん"],
+  en: ["apple", "pencil", "umbrella", "sock", "balloon", "scissors", "glasses", "drum", "hat", "stamp", "pillow", "owl", "carrot", "mirror", "candle", "ladder", "broom", "desk", "egg", "fan", "butterfly", "melon", "clock", "bag", "strawberry", "whale", "trumpet", "boat", "spoon", "kettle"],
+};
+
+export type WordRound = {
+  visual: string[];
+  audio: string[];
+  lures: string[];
+  /** 文字のリストを先に出すか（順番の影響を打ち消すため毎回ランダム） */
+  visualFirst: boolean;
+  /** 想起テストに並べる18語 */
+  test: string[];
+};
+
+export const makeWordRound = (lang: Lang, rand: () => number = Math.random): WordRound => {
+  const picked = shuffle(WORD_POOL[lang], rand).slice(0, WORDS_PER_LIST * 3);
+  const visual = picked.slice(0, WORDS_PER_LIST);
+  const audio = picked.slice(WORDS_PER_LIST, WORDS_PER_LIST * 2);
+  const lures = picked.slice(WORDS_PER_LIST * 2);
+  return { visual, audio, lures, visualFirst: rand() < 0.5, test: shuffle(picked, rand) };
+};
+
+export type WordScore = { visual: number; audio: number; falseAlarms: number };
+
+export const scoreWords = (round: WordRound, selected: ReadonlySet<string>): WordScore => ({
+  visual: round.visual.filter((w) => selected.has(w)).length,
+  audio: round.audio.filter((w) => selected.has(w)).length,
+  falseAlarms: round.lures.filter((w) => selected.has(w)).length,
+});
+
 /* ═══ 結果 ═══ */
 
 export type ChallengeResult = {
@@ -97,31 +139,49 @@ export type ChallengeResult = {
   rotationAvgDecisec: number;
   memoryCorrect: number;
   vividness: Record<TypeId, number>;
+  /** 音声の課題をスキップした場合は null */
+  words: WordScore | null;
 };
 
 /**
- * URL用コード。先頭がバージョン、以降は数字のみ:
- * 回転正答数(1桁) + 記憶正答数(1桁) + 鮮明さ6桁 + 平均時間(3桁, 0.1秒)
+ * URL用コード（数字のみ）。
+ * v1: "1" + 回転正答数(1) + 記憶正答数(1) + 鮮明さ(6) + 平均時間(3, 0.1秒) … 12桁
+ * v2: v1 の後ろに 文字の単語の正答数(1) + 音声の単語の正答数(1) + 誤答数(1) を足した15桁。スキップ時は "999"
+ * 共有済みのv1のURLも読めるようにしておく。
  */
-const CHALLENGE_VERSION = "1";
+const CHALLENGE_VERSION = "2";
+const SKIPPED_WORDS = "999";
 
 export const encodeChallenge = (r: ChallengeResult): string => {
   const t = Math.min(999, Math.max(0, Math.round(r.rotationAvgDecisec)));
-  return CHALLENGE_VERSION + r.rotationCorrect + r.memoryCorrect + TYPE_IDS.map((id) => r.vividness[id]).join("") + String(t).padStart(3, "0");
+  const words = r.words ? `${r.words.visual}${r.words.audio}${r.words.falseAlarms}` : SKIPPED_WORDS;
+  return CHALLENGE_VERSION + r.rotationCorrect + r.memoryCorrect + TYPE_IDS.map((id) => r.vividness[id]).join("") + String(t).padStart(3, "0") + words;
+};
+
+const decodeWords = (part: string): WordScore | null | undefined => {
+  if (part === SKIPPED_WORDS) return null;
+  const [visual, audio, falseAlarms] = [...part].map(Number);
+  if ([visual, audio, falseAlarms].some((n) => n > WORDS_PER_LIST)) return undefined;
+  return { visual, audio, falseAlarms };
 };
 
 export const decodeChallenge = (code: string): ChallengeResult | null => {
-  if (!/^\d{12}$/.test(code) || code[0] !== CHALLENGE_VERSION) return null;
+  const v1 = /^1\d{11}$/.test(code);
+  const v2 = /^2\d{14}$/.test(code);
+  if (!v1 && !v2) return null;
   const d = [...code].map(Number);
   const [rotationCorrect, memoryCorrect] = [d[1], d[2]];
   const viv = d.slice(3, 9);
   if (rotationCorrect > ROTATION_TRIALS || memoryCorrect > MEMORY_QUESTIONS) return null;
   if (viv.some((v) => v < VIVIDNESS_MIN || v > VIVIDNESS_MAX)) return null;
+  const words = v2 ? decodeWords(code.slice(12, 15)) : null;
+  if (words === undefined) return null;
   return {
     rotationCorrect,
     memoryCorrect,
-    rotationAvgDecisec: Number(code.slice(9)),
+    rotationAvgDecisec: Number(code.slice(9, 12)),
     vividness: Object.fromEntries(TYPE_IDS.map((id, i) => [id, viv[i]])) as Record<TypeId, number>,
+    words,
   };
 };
 
@@ -141,3 +201,7 @@ export const vividnessPct = (v: number) => Math.round(((v - VIVIDNESS_MIN) / (VI
 export const weakVisualImagery = (r: ChallengeResult) => (r.vividness.camera + r.vividness["3d"] + r.vividness.fantasy) / 3 <= 1.67;
 /** 聴覚イメージ（ラジオ・サウンド）がほぼ浮かばない */
 export const weakAuditoryImagery = (r: ChallengeResult) => (r.vividness.radio + r.vividness.sound) / 2 <= 1.5;
+
+/** 単語の記憶を 0〜100 に。誤って選んだ新しい語の数を差し引いて、当てずっぽうの影響を減らす */
+export const wordScore = (hits: number, falseAlarms: number) =>
+  Math.round(Math.max(0, (hits - falseAlarms) / WORDS_PER_LIST) * 100);

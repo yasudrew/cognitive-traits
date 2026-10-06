@@ -5,6 +5,7 @@ import {
   memoryScore,
   rotationScore,
   vividnessPct,
+  wordScore,
   weakAuditoryImagery,
   weakVisualImagery,
   type ChallengeResult,
@@ -47,6 +48,12 @@ export function ChallengeResultView({ result, analysis, lang, resultCode }: { re
   const c = CHALLENGE_TEXT[lang];
   const cam = getType("camera", lang);
   const d3 = getType("3d", lang);
+  const radio = getType("radio", lang);
+  const dict = getType("dictionary", lang);
+  const w = result.words;
+  const ear = w ? wordScore(w.audio, w.falseAlarms) : 0;
+  const eye = w ? wordScore(w.visual, w.falseAlarms) : 0;
+  const wordInsight = !w ? null : ear - eye >= 20 ? c.wordEarWins : eye - ear >= 20 ? c.wordEyeWins : c.wordEven;
   const notes: string[] = [...(weakVisualImagery(result) ? [c.weakVisual] : []), ...(weakAuditoryImagery(result) ? [c.weakAuditory] : [])];
   return (
     <div className="card">
@@ -69,6 +76,19 @@ export function ChallengeResultView({ result, analysis, lang, resultCode }: { re
         typeLabel={cam.label}
         lang={lang}
       />
+      {w ? (
+        <>
+          <Compare label={c.audioLabel} self={analysis.pct.radio} measured={ear} detail={fill(c.wordDetail, w.audio)} color={radio.color} typeLabel={radio.label} lang={lang} />
+          <Compare label={c.visualWordLabel} self={analysis.pct.dictionary} measured={eye} detail={fill(c.wordDetail, w.visual)} color={dict.color} typeLabel={dict.label} lang={lang} />
+          {wordInsight && (
+            <p className="quiz-note" style={{ marginTop: -8 }}>
+              {wordInsight}
+            </p>
+          )}
+        </>
+      ) : (
+        <p style={{ fontSize: 14, color: "var(--muted)", marginBottom: 24 }}>{c.wordSkipped}</p>
+      )}
       <h3 className="section-title" style={{ marginTop: 8, marginBottom: 12 }}>{c.vivLabel}</h3>
       {TYPE_IDS.map((id: TypeId) => {
         const tp = getType(id, lang);
