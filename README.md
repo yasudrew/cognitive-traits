@@ -38,6 +38,7 @@ npm run dev
 | `NEXT_PUBLIC_ADSENSE_CLIENT` | AdSense のパブリッシャーID（ca-pub-…） | AdSense のスクリプト・確認タグ・`ads.txt` を出さない |
 | `NEXT_PUBLIC_ADSENSE_SLOT` | AdSense の広告ユニットID | 広告枠を出さない |
 | `NEXT_PUBLIC_AMAZON_TAG` | Amazonアソシエイトのトラッキングタグ | おすすめはタグなしリンク・PR表記なし |
+| `GOOGLE_SITE_VERIFICATION` | サーチコンソールの所有確認コード（HTMLタグの content の値） | 確認タグを出さない |
 
 GA4 は Consent Mode v2 で既定を拒否にしており、同意バナーで「同意する」を選んだときだけCookieを使う。
 

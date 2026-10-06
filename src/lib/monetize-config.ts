@@ -4,6 +4,7 @@
  * - NEXT_PUBLIC_ADSENSE_CLIENT   … AdSense のパブリッシャーID（ca-pub-XXXXXXXXXXXXXXXX）
  * - NEXT_PUBLIC_ADSENSE_SLOT     … AdSense の広告ユニットID（数字）
  * - NEXT_PUBLIC_AMAZON_TAG       … Amazonアソシエイトのトラッキングタグ（xxxx-22）
+ * - GOOGLE_SITE_VERIFICATION     … Google サーチコンソールの所有確認コード（HTMLタグの content の値）
  */
 const env = (v: string | undefined): string | null => (v && v.trim() ? v.trim() : null);
 
@@ -11,6 +12,7 @@ export const GA_ID = env(process.env.NEXT_PUBLIC_GA_ID);
 export const ADSENSE_CLIENT = env(process.env.NEXT_PUBLIC_ADSENSE_CLIENT);
 export const ADSENSE_SLOT = env(process.env.NEXT_PUBLIC_ADSENSE_SLOT);
 export const AMAZON_TAG = env(process.env.NEXT_PUBLIC_AMAZON_TAG);
+export const GOOGLE_SITE_VERIFICATION = env(process.env.GOOGLE_SITE_VERIFICATION);
 
 /** Cookie同意の保存キー（localStorage） */
 export const CONSENT_STORAGE_KEY = "cognitive-traits:consent";

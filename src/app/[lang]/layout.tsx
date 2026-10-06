@@ -7,7 +7,7 @@ import { Footer } from "@/components/Footer";
 import { Nav } from "@/components/Nav";
 import { UI } from "@/lib/content";
 import { LANGS, isLang } from "@/lib/i18n";
-import { ADSENSE_CLIENT } from "@/lib/monetize-config";
+import { ADSENSE_CLIENT, GOOGLE_SITE_VERIFICATION } from "@/lib/monetize-config";
 import { SITE_URL, alternates } from "@/lib/site";
 import "../globals.css";
 
@@ -43,6 +43,8 @@ export async function generateMetadata({ params }: LayoutProps<"/[lang]">): Prom
     icons: { icon: "/favicon.svg" },
     // AdSense のサイト確認用
     other: ADSENSE_CLIENT ? { "google-adsense-account": ADSENSE_CLIENT } : {},
+    // サーチコンソールの所有確認用（HTMLタグ方式）
+    verification: GOOGLE_SITE_VERIFICATION ? { google: GOOGLE_SITE_VERIFICATION } : undefined,
   };
 }
 
