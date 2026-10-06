@@ -32,7 +32,7 @@ export default async function TypeDetailPage({ params }: PageProps<"/[lang]/type
   return (
     <div className="fadein" style={{ paddingTop: 32, paddingBottom: 40 }}>
       <div className="result-hero" style={{ padding: "36px 24px", background: tp.bg, marginBottom: 24, textAlign: "center", "--tc": tp.color } as CSSProperties}>
-        <div className="float" style={{ display: "flex", justifyContent: "center", marginBottom: 8 }}>
+        <div style={{ display: "flex", justifyContent: "center", marginBottom: 8 }}>
           <CharacterSVG type={id} size={132} />
         </div>
         <span style={{ display: "inline-block", padding: "4px 14px", borderRadius: 999, fontSize: 11, fontWeight: 700, color: "#fff", background: tp.color, marginBottom: 10 }}>{tp.category}</span>

@@ -15,11 +15,11 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
   ];
   return (
     <div className="fadein hero-top" style={{ paddingTop: 72, paddingBottom: 60 }}>
-      <p style={{ fontSize: 13, fontWeight: 600, color: "var(--muted)", letterSpacing: 2, marginBottom: 20 }}>{u.heroSub}</p>
+      <p className="eyebrow">{u.heroSub}</p>
       <h1 className="hero-title" style={{ fontSize: 36, fontWeight: 900, color: "var(--text)", lineHeight: 1.3, marginBottom: 16 }}>
         {u.heroTitle1}
         <br className="sp-only" />
-        {u.heroTitle2}
+        <span className="marker">{u.heroTitle2}</span>
       </h1>
       <p className="hero-sub" style={{ fontSize: 15, color: "var(--sub)", lineHeight: 1.9, marginBottom: 40 }}>{u.heroDesc}</p>
       <Link className="primary-btn" href={localePath(lang, "/quiz")}>
@@ -28,17 +28,17 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
       </Link>
       <p style={{ marginTop: 14, fontSize: 12, color: "var(--muted)" }}>{u.duration}</p>
       <div className="char-row" aria-hidden>
-        {TYPE_IDS.map((id, i) => (
-          <div key={id} className="float" style={{ animationDelay: `${i * 0.35}s` }}>
+        {TYPE_IDS.map((id) => (
+          <div key={id}>
             <CharacterSVG type={id} />
           </div>
         ))}
       </div>
       <div className="cat-cards">
         {cats.map((c) => (
-          <div key={c.type} className="cat-card" style={{ background: `${CATEGORIES.find((x) => x.id === c.type)?.color ?? "#999"}12` }}>
+          <div key={c.type} className="cat-card" style={{ background: `${CATEGORIES.find((x) => x.id === c.type)?.color ?? "#999"}1C` }}>
             <div style={{ display: "flex", justifyContent: "center", marginBottom: 8 }}>
-              <CategoryIcon type={c.type} size={36} />
+              <CategoryIcon type={c.type} size={44} />
             </div>
             <div style={{ fontSize: 13, fontWeight: 700, color: "var(--text)" }}>{c.label}</div>
             <div style={{ fontSize: 11, color: "var(--muted)", marginTop: 2 }}>{c.sub}</div>

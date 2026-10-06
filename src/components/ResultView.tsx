@@ -42,10 +42,8 @@ export function ResultView({ analysis, lang, shareUrl, resultCode, challenge }: 
     <div className="fadein" style={{ paddingTop: 32, paddingBottom: 40 }}>
       <div className="result-hero" style={{ padding: "36px 24px", background: single ? top.bg : "var(--surface)", marginBottom: 24, textAlign: "center", "--tc": top.color } as CSSProperties}>
         <div style={{ display: "flex", justifyContent: "center", gap: single ? 0 : 16, marginBottom: 8 }}>
-          {topTypes.map((tp, i) => (
-            <div key={tp.id} className="float" style={{ animationDelay: `${i * 0.4}s` }}>
-              <CharacterSVG type={tp.id} size={topTypes.length > 2 ? 80 : single ? 132 : 100} />
-            </div>
+          {topTypes.map((tp) => (
+            <CharacterSVG key={tp.id} type={tp.id} size={topTypes.length > 2 ? 80 : single ? 132 : 100} />
           ))}
         </div>
         <div style={{ display: "flex", justifyContent: "center", gap: 8, flexWrap: "wrap", marginBottom: 10 }}>

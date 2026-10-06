@@ -24,8 +24,8 @@ export function AnimBar({ value, max, color, delay, label, pct, avgMarker = fals
         </span>
         <span style={{ fontSize: 17, fontWeight: 800, color, fontFeatureSettings: "'tnum'" }}>{pct}%</span>
       </div>
-      <div style={{ position: "relative", height: 8, background: "rgba(0,0,0,0.05)", borderRadius: 4 }}>
-        <div style={{ height: "100%", width: `${width}%`, background: color, borderRadius: 4, transition: "width 1s cubic-bezier(0.34,1.56,0.64,1)" }} />
+      <div style={{ position: "relative", height: 12, background: "rgba(0,0,0,0.05)", borderRadius: 999 }}>
+        <div style={{ height: "100%", width: `${width}%`, background: color, borderRadius: 999, transition: "width 1s cubic-bezier(0.34,1.56,0.64,1)" }} />
         {avgMarker && <span className="avg-line" aria-hidden />}
       </div>
     </div>

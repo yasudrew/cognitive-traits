@@ -47,7 +47,7 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[la
   return (
     <html lang={lang} className={font.variable}>
       <body>
-        <div style={{ minHeight: "100vh", background: "var(--bg)" }}>
+        <div style={{ minHeight: "100vh" }}>
           <div className="container">
             <Nav lang={lang} />
             <main>{children}</main>
