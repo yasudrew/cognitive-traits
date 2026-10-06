@@ -47,11 +47,11 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
         <div className="cat-cards">
           {cats.map((c) => (
             <div key={c.type} className="cat-card" style={{ background: `${CATEGORIES.find((x) => x.id === c.type)?.color ?? "#999"}1C` }}>
-              <div style={{ display: "flex", justifyContent: "center", marginBottom: 8 }}>
+              <div className="cat-icon">
                 <CategoryIcon type={c.type} size={44} />
               </div>
-              <div style={{ fontSize: 14, fontWeight: 700, color: "var(--text)" }}>{c.label}</div>
-              <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 2 }}>{c.sub}</div>
+              <div className="cat-label">{c.label}</div>
+              <div className="cat-sub">{c.sub}</div>
             </div>
           ))}
         </div>
@@ -106,7 +106,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
         </ol>
       </section>
 
-      <section className="home-section">
+      <section className="home-section faq-section">
         <h2 className="home-h2">{t.faqTitle}</h2>
         <div className="faq">
           {t.faq.map((f) => (
