@@ -265,3 +265,22 @@ a{color:inherit}
 .pair-person{display:flex;flex-direction:column;align-items:center;gap:2px}
 .pair-list{list-style:none;display:grid;gap:8px;font-size:14px;color:var(--sub)}
 .pair-list li{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+
+/* ═══ 記事 ═══ */
+.article-list{display:grid;gap:8px}
+.breadcrumb{font-size:12px;color:var(--muted);margin-bottom:16px}
+.breadcrumb a{color:var(--muted)}
+.article-hero{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.article-hero h1{font-size:24px;font-weight:700;line-height:1.5;margin:12px 0 8px}
+.article-toc ol{padding-left:24px;display:grid;gap:4px;font-size:14px}
+.article-toc a{color:var(--brand-hover)}
+.article-body h2{font-size:22px;font-weight:700;line-height:1.5;margin:48px 0 16px;padding-left:12px;border-left:4px solid var(--brand)}
+.article-body p{font-size:16px;line-height:1.9;color:var(--sub);margin-bottom:16px}
+.article-body ul{padding-left:24px;display:grid;gap:8px;margin-bottom:16px;font-size:16px;color:var(--sub)}
+.article-steps{list-style:none;display:grid;gap:16px;margin-bottom:16px}
+.article-steps li{display:flex;gap:16px;align-items:flex-start;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:16px 20px}
+.article-steps h3{font-size:17px;font-weight:700;line-height:1.5;margin-bottom:4px}
+.article-steps p{font-size:15px;margin-bottom:0}
+.article-note{background:#FFF6DC;border-radius:var(--r-md);padding:16px 20px;font-size:14px!important;margin-top:32px}
+.article-hero svg{flex-shrink:0}
+@media(max-width:767px){.article-hero svg{width:72px;height:72px}.article-hero h1{font-size:20px}}

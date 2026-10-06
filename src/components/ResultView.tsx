@@ -11,6 +11,7 @@ import { ChallengeCta, ChallengeResultView } from "./challenge/ChallengeResultVi
 import { CharacterSVG } from "./Illustrations";
 import { ShareButtons } from "./ShareButtons";
 import { TypeAccordion } from "./TypeAccordion";
+import { TypeArticleLinks } from "./TypeArticleLinks";
 import { TypeGuideView } from "./TypeGuideView";
 import { AdSlot } from "./AdSlot";
 import { Recommendations } from "./Recommendations";
@@ -131,6 +132,7 @@ export function ResultView({ analysis, lang, shareUrl, inviteUrl, resultCode, ch
         {topTypes.map((tp) => (
           <TypeGuideView key={tp.id} id={tp.id} lang={lang} heading={GUIDE_LABELS[lang].forYou} />
         ))}
+        {lang === "ja" && <TypeArticleLinks typeId={top.id} />}
       </div>
 
       {lang === "ja" && <Recommendations typeId={top.id} />}

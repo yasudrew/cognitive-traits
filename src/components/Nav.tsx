@@ -37,6 +37,11 @@ export function Nav({ lang }: { lang: Lang }) {
         <Link className={`nav-link ${is("/types") ? "active" : ""}`} href={localePath(lang, "/types")} onClick={close}>
           {u.navTypes}
         </Link>
+        {lang === "ja" && (
+          <Link className={`nav-link ${is("/articles") ? "active" : ""}`} href={localePath(lang, "/articles")} onClick={close}>
+            読みもの
+          </Link>
+        )}
         {lastResult && (
           <Link className={`nav-link ${is("/r") ? "active" : ""}`} href={localePath(lang, `/r/${lastResult}`)} onClick={close}>
             {u.navResult}
