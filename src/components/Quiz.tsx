@@ -7,7 +7,8 @@ import { fill, localePath, type Lang } from "@/lib/i18n";
 import { saveLastResult } from "@/lib/last-result";
 import { QUESTIONS } from "@/lib/questions";
 import { clearProgress, parseProgress, saveProgress, useSavedProgressRaw } from "@/lib/quiz-progress";
-import { ANSWER_VALUES, encodeAnswers, type Answer } from "@/lib/scoring";
+import { track } from "@/lib/analytics";
+import { ANSWER_VALUES, analyze, encodeAnswers, type Answer } from "@/lib/scoring";
 import { SITE_TEXT } from "@/lib/site-text";
 
 export function Quiz({ lang }: { lang: Lang }) {
@@ -31,6 +32,8 @@ export function Quiz({ lang }: { lang: Lang }) {
     const complete = all.filter((v): v is Answer => v !== undefined);
     if (complete.length !== total) throw new Error(`Quiz finished with ${complete.length}/${total} answers`);
     const code = encodeAnswers(complete);
+    const result = analyze(complete);
+    track({ name: "quiz_complete", top_type: result.sorted[0], profile: result.profile, consistency: result.consistency });
     clearProgress();
     saveLastResult(code);
     router.push(localePath(lang, `/r/${code}`));
@@ -49,6 +52,7 @@ export function Quiz({ lang }: { lang: Lang }) {
 
   const answer = (v: Answer) =>
     transition(() => {
+      if (fresh) track({ name: "quiz_start" });
       const next = answers.map((a, i) => (i === idx ? v : a));
       setAnswers(next);
       setResumeHandled(true);
@@ -67,6 +71,7 @@ export function Quiz({ lang }: { lang: Lang }) {
 
   const resume = () => {
     if (!saved) return;
+    track({ name: "quiz_resume", answered: saved.answers.filter((a) => a !== null).length });
     setAnswers(saved.answers.map((a) => a ?? undefined));
     setIdx(saved.idx);
     setResumeHandled(true);

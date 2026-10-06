@@ -11,6 +11,8 @@ import { CharacterSVG } from "./Illustrations";
 import { ShareButtons } from "./ShareButtons";
 import { TypeAccordion } from "./TypeAccordion";
 import { TypeGuideView } from "./TypeGuideView";
+import { AdSlot } from "./AdSlot";
+import { Recommendations } from "./Recommendations";
 import { GUIDE_LABELS } from "@/lib/guides";
 
 const TOC_KEYS = ["profile", "scores", "categories", "guide", "details", "challenge", "share"] as const;
@@ -128,6 +130,10 @@ export function ResultView({ analysis, lang, shareUrl, resultCode, challenge }: 
           <TypeGuideView key={tp.id} id={tp.id} lang={lang} heading={GUIDE_LABELS[lang].forYou} />
         ))}
       </div>
+
+      {lang === "ja" && <Recommendations typeId={top.id} />}
+
+      <AdSlot lang={lang} />
 
       <div id="details">
         <TypeAccordion rows={types} lang={lang} />

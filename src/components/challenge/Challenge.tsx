@@ -13,6 +13,7 @@ import {
   type MemoryRound,
   type RotationTrial,
 } from "@/lib/challenge";
+import { track } from "@/lib/analytics";
 import { CHALLENGE_TEXT, VIVIDNESS_PROMPTS } from "@/lib/challenge-text";
 import type { TypeId } from "@/lib/content";
 import { localePath, type Lang } from "@/lib/i18n";
@@ -113,6 +114,7 @@ export function Challenge({ lang, resultCode }: { lang: Lang; resultCode: string
     const avgMs = right.length ? right.reduce((s, r) => s + r.ms, 0) / right.length : ROTATION_TIME_LIMIT_MS;
     const x = encodeChallenge({ rotationCorrect: right.length, rotationAvgDecisec: avgMs / 100, memoryCorrect, vividness: viv });
     if (!resultCode) throw new Error("Challenge finished without a main result code");
+    track({ name: "challenge_complete", rotation: right.length, memory: memoryCorrect });
     const target = `${resultCode}?x=${x}`;
     saveLastResult(target);
     setPhase({ step: "done" });
@@ -131,7 +133,10 @@ export function Challenge({ lang, resultCode }: { lang: Lang; resultCode: string
         </ol>
         <p style={{ fontSize: 12, color: "var(--muted)", marginBottom: 24 }}>{c.introTime}</p>
         {resultCode ? (
-          <button className="primary-btn" onClick={() => setPhase({ step: "rotation", trials: makeRotationTrials(), log: [] })}>
+          <button className="primary-btn" onClick={() => {
+              track({ name: "challenge_start" });
+              setPhase({ step: "rotation", trials: makeRotationTrials(), log: [] });
+            }}>
             {c.start}
             <span style={{ marginLeft: 8 }}>→</span>
           </button>
