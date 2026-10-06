@@ -18,7 +18,7 @@
 ## Tech Stack
 
 - Next.js 16（App Router / SSG）+ TypeScript
-- Vercel (hosting)
+- Cloudflare Workers（OpenNext）でホスティング（Vercel から移行中）
 
 ## Development
 
@@ -27,9 +27,18 @@ npm install
 npm run dev
 ```
 
+Cloudflare の実行環境で確認・デプロイする場合:
+
+```bash
+npm run preview   # OpenNext でビルドし、ローカルの Workers 環境で起動（http://localhost:8787）
+npm run deploy    # ビルドして Cloudflare にデプロイ（通常は GitHub 連携の自動デプロイを使う）
+```
+
+`npm run preview` は内部で `opennextjs-cloudflare build` → キャッシュの準備（populateCache）→ `wrangler dev` を行う。`wrangler dev` を直接起動すると、事前生成ページがキャッシュに無く 404 になる。
+
 本番URLは環境変数 `NEXT_PUBLIC_SITE_URL` で指定する（未設定時は `https://cognitive-traits.vercel.app`）。canonical・OG画像・sitemap がこの値を使う。
 
-### 環境変数（Vercel）
+### 環境変数（Cloudflare のビルド設定）
 
 | 変数 | 内容 | 未設定のとき |
 |------|------|------|
@@ -59,7 +68,7 @@ GA4 は Consent Mode v2 で既定を拒否にしており、同意バナーで�
 | `/articles` `/articles/{slug}` | 読みもの（タイプ別の記事。日本語のみ） |
 | `/privacy` `/operator` | プライバシーポリシー・運営者情報（`src/lib/legal-text.ts` の【要記入】を埋めるまで noindex） |
 
-日本語ページは `src/proxy.ts` で `/ja/...` に内部 rewrite している。
+日本語ページは `next.config.ts` の `rewrites` で `/ja/...` に内部 rewrite している。旧URL（`cognitive-traits.vercel.app`）から本番URLへの308転送も `next.config.ts` の `redirects` で行う（OpenNext では Node.js のミドルウェアが実験的扱いのため、`proxy.ts` は使わない）。
 
 ## ディレクトリ
 
