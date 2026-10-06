@@ -50,6 +50,9 @@ GA4 は Consent Mode v2 で既定を拒否にしており、同意バナーで�
 | `/r/{code}` | 診断結果（30問の回答をコード化した共有用URL。noindex） |
 | `/r/{code}?x={challenge}` | 精密チャレンジの結果を含む診断結果 |
 | `/challenge?r={code}` | 精密チャレンジ（本診断の結果コードを引き継ぐ） |
+| `/r/{code}/story` | 結果のストーリーズ用画像（1080×1920 PNG） |
+| `/pair/{A}` | 相性診断への招待（招待された人はここから診断） |
+| `/pair/{A}/{B}` | 2人の相性（似ている度・ペアの種類・お互いへの伝え方。noindex） |
 | `/types` `/types/{id}` | タイプ一覧・タイプ別ページ |
 | `/about` | 認知特性とは |
 | `/privacy` `/operator` | プライバシーポリシー・運営者情報（`src/lib/legal-text.ts` の【要記入】を埋めるまで noindex） |
@@ -63,6 +66,7 @@ GA4 は Consent Mode v2 で既定を拒否にしており、同意バナーで�
 - `src/lib/scoring.ts` — 採点・プロフィール判定・回答の一貫性、結果コードのエンコード／デコード
 - `src/lib/challenge.ts` — 精密チャレンジの課題生成・採点・結果コード（v2、v1も読める）
 - `src/lib/speech.ts` — 単語の読み上げ（Web Speech API）
+- `src/lib/pair.ts` / `src/lib/pair-text.ts` — 相性の計算と文言
 - `src/lib/guides.ts` — タイプ別の詳しい解説（日英）
 - `src/lib/monetize-config.ts` / `src/lib/recommendations.ts` — 計測・広告・アフィリエイトの設定とタイプ別おすすめ
 - `src/lib/site-text.ts` / `src/lib/legal-text.ts` — トップ・FAQ・規約ページの文言
