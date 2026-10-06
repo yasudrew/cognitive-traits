@@ -40,6 +40,7 @@ npm run dev
 | `/challenge?r={code}` | 精密チャレンジ（本診断の結果コードを引き継ぐ） |
 | `/types` `/types/{id}` | タイプ一覧・タイプ別ページ |
 | `/about` | 認知特性とは |
+| `/privacy` `/operator` | プライバシーポリシー・運営者情報（`src/lib/legal-text.ts` の【要記入】を埋めるまで noindex） |
 
 日本語ページは `src/proxy.ts` で `/ja/...` に内部 rewrite している。
 
@@ -49,6 +50,8 @@ npm run dev
 - `src/lib/content.ts` — タイプ説明・UI文言（日英）
 - `src/lib/scoring.ts` — 採点・プロフィール判定・回答の一貫性、結果コードのエンコード／デコード
 - `src/lib/challenge.ts` — 精密チャレンジの課題生成・採点・結果コード
+- `src/lib/guides.ts` — タイプ別の詳しい解説（日英）
+- `src/lib/site-text.ts` / `src/lib/legal-text.ts` — トップ・FAQ・規約ページの文言
 - `src/app/[lang]/` — 各ページと OG 画像
 
 ## 参考
