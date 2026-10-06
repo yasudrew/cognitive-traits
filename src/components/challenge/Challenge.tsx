@@ -7,21 +7,33 @@ import {
   MEMORY_STUDY_MS,
   ROTATION_TIME_LIMIT_MS,
   VIVIDNESS_ITEMS,
+  WORD_GAP_MS,
+  WORD_SHOW_MS,
   encodeChallenge,
   makeMemoryRound,
   makeRotationTrials,
+  makeWordRound,
+  scoreWords,
   type MemoryRound,
   type RotationTrial,
+  type WordRound,
+  type WordScore,
 } from "@/lib/challenge";
 import { track } from "@/lib/analytics";
 import { CHALLENGE_TEXT, VIVIDNESS_PROMPTS } from "@/lib/challenge-text";
 import type { TypeId } from "@/lib/content";
-import { localePath, type Lang } from "@/lib/i18n";
+import { fill, localePath, type Lang } from "@/lib/i18n";
 import { saveLastResult } from "@/lib/last-result";
+import { canSpeak, speak, stopSpeaking } from "@/lib/speech";
 import { MemoryIcon } from "./MemoryIcon";
 import { Polycube } from "./Polycube";
 
 type RotationLog = { correct: boolean; ms: number };
+
+/** 前半3課題の結果。音声の課題に進むときに持ち回る */
+type Base = { rotation: RotationLog[]; memoryCorrect: number; viv: Record<TypeId, number> };
+type WordMode = "visual" | "audio";
+const wordOrder = (round: WordRound): [WordMode, WordMode] => (round.visualFirst ? ["visual", "audio"] : ["audio", "visual"]);
 
 type Phase =
   | { step: "intro" }
@@ -29,6 +41,10 @@ type Phase =
   | { step: "memoryStudy"; round: MemoryRound; rotation: RotationLog[] }
   | { step: "memoryTest"; round: MemoryRound; rotation: RotationLog[]; correct: number; idx: number }
   | { step: "vividness"; rotation: RotationLog[]; memoryCorrect: number; viv: Partial<Record<TypeId, number>> }
+  | { step: "wordIntro"; base: Base; checked: boolean }
+  | { step: "wordStudy"; base: Base; round: WordRound; part: 0 | 1 }
+  | { step: "wordBreak"; base: Base; round: WordRound }
+  | { step: "wordTest"; base: Base; round: WordRound; selected: string[] }
   | { step: "done" };
 
 /** 進捗バー（3つの課題を通した位置） */
@@ -104,15 +120,57 @@ function MemoryStudy({ round, onDone, lang }: { round: MemoryRound; onDone: () =
   );
 }
 
+/** 単語を1つずつ、文字で見せる／音声で読み上げる */
+function WordStudy({ words, mode, lang, onDone }: { words: readonly string[]; mode: WordMode; lang: Lang; onDone: () => void }) {
+  const c = CHALLENGE_TEXT[lang];
+  const [cur, setCur] = useState(-1);
+  const done = useEffectEvent(onDone);
+  useEffect(() => {
+    let cancelled = false;
+    const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+    const run = async () => {
+      await sleep(800);
+      for (let i = 0; i < words.length; i++) {
+        if (cancelled) return;
+        setCur(i);
+        if (mode === "audio") {
+          await speak(words[i], lang);
+        } else {
+          await sleep(WORD_SHOW_MS);
+          if (cancelled) return;
+          setCur(-1);
+        }
+        await sleep(WORD_GAP_MS);
+      }
+      if (!cancelled) done();
+    };
+    void run();
+    return () => {
+      cancelled = true;
+      stopSpeaking();
+    };
+  }, [words, mode, lang]);
+
+  return (
+    <div className="fadein">
+      <p style={{ fontSize: 14, color: "var(--sub)", textAlign: "center", marginBottom: 16 }}>{mode === "visual" ? c.visualStudy : c.audioStudy}</p>
+      <div className="word-stage" aria-live="off">
+        {mode === "visual" ? (cur >= 0 ? <span className="word-big">{words[cur]}</span> : null) : <span className={`speaker${cur >= 0 ? " on" : ""}`} aria-hidden>🔊</span>}
+      </div>
+      <p style={{ fontSize: 14, color: "var(--muted)", textAlign: "center" }}>{Math.max(cur + 1, 0)} / {words.length}</p>
+    </div>
+  );
+}
+
 export function Challenge({ lang, resultCode }: { lang: Lang; resultCode: string | null }) {
   const c = CHALLENGE_TEXT[lang];
   const router = useRouter();
   const [phase, setPhase] = useState<Phase>({ step: "intro" });
 
-  const finish = (rotation: RotationLog[], memoryCorrect: number, viv: Record<TypeId, number>) => {
+  const finish = ({ rotation, memoryCorrect, viv }: Base, words: WordScore | null) => {
     const right = rotation.filter((r) => r.correct);
     const avgMs = right.length ? right.reduce((s, r) => s + r.ms, 0) / right.length : ROTATION_TIME_LIMIT_MS;
-    const x = encodeChallenge({ rotationCorrect: right.length, rotationAvgDecisec: avgMs / 100, memoryCorrect, vividness: viv });
+    const x = encodeChallenge({ rotationCorrect: right.length, rotationAvgDecisec: avgMs / 100, memoryCorrect, vividness: viv, words });
     if (!resultCode) throw new Error("Challenge finished without a main result code");
     track({ name: "challenge_complete", rotation: right.length, memory: memoryCorrect });
     const target = `${resultCode}?x=${x}`;
@@ -245,13 +303,105 @@ export function Challenge({ lang, resultCode }: { lang: Lang; resultCode: string
                 onClick={() => {
                   const viv = { ...phase.viv, [id]: i + 1 };
                   if (Object.keys(viv).length < VIVIDNESS_ITEMS.length) setPhase({ ...phase, viv });
-                  else finish(phase.rotation, phase.memoryCorrect, viv as Record<TypeId, number>);
+                  else setPhase({ step: "wordIntro", base: { rotation: phase.rotation, memoryCorrect: phase.memoryCorrect, viv: viv as Record<TypeId, number> }, checked: false });
                 }}
               >
                 <span className="likert-num">{i + 1}</span>
                 <span>{label}</span>
               </button>
             ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (phase.step === "wordIntro") {
+    const supported = canSpeak();
+    return (
+      <div style={{ paddingTop: 32, paddingBottom: 40 }}>
+        <Progress section={0} of={3} label={`4. ${c.wordTitle}`} />
+        <div className="fadein">
+          <p style={{ fontSize: 16, color: "var(--sub)", marginBottom: 24 }}>{supported ? c.wordIntro : c.noSpeech}</p>
+          {supported ? (
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, alignItems: "flex-start" }}>
+              <button className="secondary-btn" onClick={() => void speak(c.soundCheckWord, lang).then(() => setPhase({ ...phase, checked: true }))}>
+                🔊 {c.soundCheck}
+              </button>
+              {phase.checked && <p style={{ fontSize: 14, color: "var(--muted)" }}>{c.soundCheckHint}</p>}
+              <button className="primary-btn" disabled={!phase.checked} onClick={() => setPhase({ step: "wordStudy", base: phase.base, round: makeWordRound(lang), part: 0 })}>
+                {c.soundReady}
+              </button>
+              <button className="back-link" onClick={() => finish(phase.base, null)}>
+                {c.wordSkip}
+              </button>
+            </div>
+          ) : (
+            <button className="primary-btn" onClick={() => finish(phase.base, null)}>
+              {c.toResult}
+            </button>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  if (phase.step === "wordStudy") {
+    const mode = wordOrder(phase.round)[phase.part];
+    const words = mode === "visual" ? phase.round.visual : phase.round.audio;
+    return (
+      <div style={{ paddingTop: 32, paddingBottom: 40 }}>
+        <Progress section={phase.part + 1} of={3} label={`4. ${c.wordTitle}`} />
+        <WordStudy
+          key={`${phase.part}-${mode}`}
+          words={words}
+          mode={mode}
+          lang={lang}
+          onDone={() => setPhase(phase.part === 0 ? { step: "wordBreak", base: phase.base, round: phase.round } : { step: "wordTest", base: phase.base, round: phase.round, selected: [] })}
+        />
+      </div>
+    );
+  }
+
+  if (phase.step === "wordBreak") {
+    // 2つ目のリストの前にボタンを挟む（音声の再生をユーザー操作の直後に始めるため）
+    const next = wordOrder(phase.round)[1];
+    return (
+      <div style={{ paddingTop: 32, paddingBottom: 40 }}>
+        <Progress section={1} of={3} label={`4. ${c.wordTitle}`} />
+        <div className="fadein" style={{ textAlign: "center", padding: "40px 0" }}>
+          <p style={{ fontSize: 16, color: "var(--sub)", marginBottom: 24 }}>{next === "audio" ? c.nextAudio : c.nextVisual}</p>
+          <button className="primary-btn" onClick={() => setPhase({ step: "wordStudy", base: phase.base, round: phase.round, part: 1 })}>
+            {c.next}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (phase.step === "wordTest") {
+    const selected = new Set(phase.selected);
+    // 連続で押されても取りこぼさないよう、直前の状態から更新する
+    const toggle = (w: string) =>
+      setPhase((p) => (p.step === "wordTest" ? { ...p, selected: p.selected.includes(w) ? p.selected.filter((x) => x !== w) : [...p.selected, w] } : p));
+    return (
+      <div style={{ paddingTop: 32, paddingBottom: 40 }}>
+        <Progress section={3} of={3} label={`4. ${c.wordTitle}`} />
+        <div className="fadein">
+          <p style={{ fontSize: 16, fontWeight: 700, marginBottom: 4 }}>{c.testPrompt}</p>
+          <p style={{ fontSize: 14, color: "var(--muted)", marginBottom: 16 }}>{c.testHint}</p>
+          <div className="word-chips">
+            {phase.round.test.map((w) => (
+              <button key={w} className={`word-chip${selected.has(w) ? " on" : ""}`} aria-pressed={selected.has(w)} onClick={() => toggle(w)}>
+                {w}
+              </button>
+            ))}
+          </div>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 24, gap: 16 }}>
+            <span style={{ fontSize: 14, color: "var(--muted)" }}>{fill(c.selectedCount, selected.size)}</span>
+            <button className="primary-btn" onClick={() => finish(phase.base, scoreWords(phase.round, selected))}>
+              {c.testDone}
+            </button>
           </div>
         </div>
       </div>

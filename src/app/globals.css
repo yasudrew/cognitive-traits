@@ -225,3 +225,14 @@ a{color:inherit}
 .rec-name{font-size:16px;font-weight:700;color:var(--text)}
 .rec-why{font-size:14px;color:var(--sub)}
 .rec-cta{font-size:14px;font-weight:700;color:var(--brand-hover)}
+
+/* ═══ 耳と目の単語記憶 ═══ */
+.word-stage{height:160px;display:flex;align-items:center;justify-content:center;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);margin-bottom:12px}
+.word-big{font-size:40px;font-weight:700;letter-spacing:.06em}
+.speaker{font-size:48px;opacity:.25;transition:opacity .2s,transform .2s}
+.speaker.on{opacity:1;transform:scale(1.1)}
+.word-chips{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.word-chip{min-height:48px;padding:8px;font-size:16px;font-family:inherit;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);cursor:pointer;transition:background .15s,border-color .15s}
+.word-chip:hover{border-color:var(--brand)}
+.word-chip.on{background:var(--brand);border-color:var(--brand);color:#fff;font-weight:700}
+.primary-btn:disabled{background:#B3B3B3;cursor:not-allowed}
