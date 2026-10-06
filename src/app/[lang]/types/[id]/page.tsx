@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { CharacterSVG } from "@/components/Illustrations";
 import { AdSlot } from "@/components/AdSlot";
 import { Recommendations } from "@/components/Recommendations";
+import { TypeArticleLinks } from "@/components/TypeArticleLinks";
 import { TypeGuideView } from "@/components/TypeGuideView";
 import { GUIDES } from "@/lib/guides";
 import { TYPE_IDS, UI, getType, isTypeId } from "@/lib/content";
@@ -41,6 +42,7 @@ export default async function TypeDetailPage({ params }: PageProps<"/[lang]/type
         <p style={{ fontSize: 14, color: "var(--muted)" }}>{tp.sub}</p>
       </div>
       <TypeGuideView id={id} lang={lang} showHeader={false} />
+      {lang === "ja" && <TypeArticleLinks typeId={id} />}
       {lang === "ja" && <Recommendations typeId={id} />}
       <AdSlot lang={lang} />
       <div style={{ textAlign: "center", margin: "24px 0 36px" }}>

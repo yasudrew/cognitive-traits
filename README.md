@@ -55,6 +55,7 @@ GA4 は Consent Mode v2 で既定を拒否にしており、同意バナーで�
 | `/pair/{A}/{B}` | 2人の相性（似ている度・ペアの種類・お互いへの伝え方。noindex） |
 | `/types` `/types/{id}` | タイプ一覧・タイプ別ページ |
 | `/about` | 認知特性とは |
+| `/articles` `/articles/{slug}` | 読みもの（タイプ別の記事。日本語のみ） |
 | `/privacy` `/operator` | プライバシーポリシー・運営者情報（`src/lib/legal-text.ts` の【要記入】を埋めるまで noindex） |
 
 日本語ページは `src/proxy.ts` で `/ja/...` に内部 rewrite している。
@@ -67,6 +68,7 @@ GA4 は Consent Mode v2 で既定を拒否にしており、同意バナーで�
 - `src/lib/challenge.ts` — 精密チャレンジの課題生成・採点・結果コード（v2、v1も読める）
 - `src/lib/speech.ts` — 単語の読み上げ（Web Speech API）
 - `src/lib/pair.ts` / `src/lib/pair-text.ts` — 相性の計算と文言
+- `src/lib/articles/` — 記事の本文データ（テーマごとのファイル）と一覧・関連記事の取得
 - `src/lib/guides.ts` — タイプ別の詳しい解説（日英）
 - `src/lib/monetize-config.ts` / `src/lib/recommendations.ts` — 計測・広告・アフィリエイトの設定とタイプ別おすすめ
 - `src/lib/site-text.ts` / `src/lib/legal-text.ts` — トップ・FAQ・規約ページの文言

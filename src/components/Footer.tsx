@@ -11,6 +11,7 @@ export function Footer({ lang }: { lang: Lang }) {
     ["/", nav.home],
     ["/about", nav.about],
     ["/types", nav.types],
+    ...(lang === "ja" ? ([["/articles", "読みもの"]] as const) : []),
     ["/privacy", nav.privacy],
     ["/operator", nav.operator],
   ] as const;
