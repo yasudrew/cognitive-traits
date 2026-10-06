@@ -54,8 +54,8 @@ export function Quiz({ lang }: { lang: Lang }) {
         </span>
         <span style={{ fontSize: 13, color: "var(--muted)" }}>{Math.round((idx / total) * 100)}%</span>
       </div>
-      <div style={{ height: 3, background: "rgba(0,0,0,0.06)", borderRadius: 2, marginBottom: 20, overflow: "hidden" }}>
-        <div style={{ height: "100%", borderRadius: 2, transition: "width .4s ease", width: `${(idx / total) * 100}%`, background: "var(--text)" }} />
+      <div className="progress" style={{ marginBottom: 20 }}>
+        <div className="progress-fill" style={{ width: `${(idx / total) * 100}%` }} />
       </div>
       {idx === 0 && <p className="quiz-note">{u.quizNote}</p>}
       <div className={fade} key={idx}>
@@ -67,7 +67,7 @@ export function Quiz({ lang }: { lang: Lang }) {
             <span className="pair-tag">A</span>
             {q.a}
           </button>
-          <button className={`pair-card${current !== undefined && current > 2 ? " chosen" : ""}`} onClick={() => answer(4)}>
+          <button className={`pair-card side-b${current !== undefined && current > 2 ? " chosen" : ""}`} onClick={() => answer(4)}>
             <span className="pair-tag">B</span>
             {q.b}
           </button>

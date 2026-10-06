@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { CategoryIcon } from "@/components/Illustrations";
-import { UI, type CategoryId } from "@/lib/content";
+import { CategoryIcon, CharacterSVG } from "@/components/Illustrations";
+import { CATEGORIES, TYPE_IDS, UI, type CategoryId } from "@/lib/content";
 import { isLang, localePath } from "@/lib/i18n";
 
 export default async function HomePage({ params }: PageProps<"/[lang]">) {
@@ -27,9 +27,16 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
         <span style={{ marginLeft: 8 }}>→</span>
       </Link>
       <p style={{ marginTop: 14, fontSize: 12, color: "var(--muted)" }}>{u.duration}</p>
-      <div style={{ marginTop: 56, display: "flex", gap: 1, borderRadius: 12, overflow: "hidden", border: "1px solid var(--border)" }}>
-        {cats.map((c, i) => (
-          <div key={c.type} className="cat-card" style={{ flex: 1, padding: "20px 12px", textAlign: "center", background: "var(--surface)", borderRight: i < 2 ? "1px solid var(--border)" : "none" }}>
+      <div className="char-row" aria-hidden>
+        {TYPE_IDS.map((id, i) => (
+          <div key={id} className="float" style={{ animationDelay: `${i * 0.35}s` }}>
+            <CharacterSVG type={id} />
+          </div>
+        ))}
+      </div>
+      <div className="cat-cards">
+        {cats.map((c) => (
+          <div key={c.type} className="cat-card" style={{ background: `${CATEGORIES.find((x) => x.id === c.type)?.color ?? "#999"}12` }}>
             <div style={{ display: "flex", justifyContent: "center", marginBottom: 8 }}>
               <CategoryIcon type={c.type} size={36} />
             </div>

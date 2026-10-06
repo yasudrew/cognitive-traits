@@ -18,7 +18,7 @@ export function TypeAccordion({ rows, lang }: { rows: Row[]; lang: Lang }) {
 
   return (
     <div className="card" style={{ padding: "12px 0" }}>
-      <h2 className="section-title" style={{ padding: "0 24px", marginBottom: 8 }}>
+      <h2 className="section-title" style={{ marginTop: 8, marginBottom: 8 }}>
         {u.detailTitle}
       </h2>
       {rows.map((tp) => {

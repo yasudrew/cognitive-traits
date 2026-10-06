@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import type { CSSProperties } from "react";
 import { notFound } from "next/navigation";
 import { CharacterSVG } from "@/components/Illustrations";
 import { TypeGuideView } from "@/components/TypeGuideView";
@@ -30,15 +31,15 @@ export default async function TypeDetailPage({ params }: PageProps<"/[lang]/type
   const others = TYPE_IDS.filter((x) => x !== id).map((x) => getType(x, lang));
   return (
     <div className="fadein" style={{ paddingTop: 32, paddingBottom: 40 }}>
-      <div className="result-hero" style={{ padding: "36px 24px", borderRadius: 16, background: tp.bg, border: `1px solid ${tp.color}18`, marginBottom: 24, textAlign: "center" }}>
-        <div style={{ display: "flex", justifyContent: "center", marginBottom: 8 }}>
-          <CharacterSVG type={id} size={100} />
+      <div className="result-hero" style={{ padding: "36px 24px", background: tp.bg, marginBottom: 24, textAlign: "center", "--tc": tp.color } as CSSProperties}>
+        <div className="float" style={{ display: "flex", justifyContent: "center", marginBottom: 8 }}>
+          <CharacterSVG type={id} size={132} />
         </div>
-        <span style={{ display: "inline-block", padding: "4px 12px", borderRadius: 4, fontSize: 11, fontWeight: 600, color: tp.color, background: `${tp.color}14`, marginBottom: 10 }}>{tp.category}</span>
+        <span style={{ display: "inline-block", padding: "4px 14px", borderRadius: 999, fontSize: 11, fontWeight: 700, color: "#fff", background: tp.color, marginBottom: 10 }}>{tp.category}</span>
         <h1 className="result-top-label" style={{ fontSize: 26, fontWeight: 900, color: tp.color, marginBottom: 4 }}>{tp.label}</h1>
         <p style={{ fontSize: 13, color: "var(--muted)" }}>{tp.sub}</p>
       </div>
-      <TypeGuideView id={id} lang={lang} />
+      <TypeGuideView id={id} lang={lang} showHeader={false} />
       <div style={{ textAlign: "center", margin: "24px 0 36px" }}>
         <Link className="primary-btn" href={localePath(lang, "/quiz")}>
           {u.tryBtn}

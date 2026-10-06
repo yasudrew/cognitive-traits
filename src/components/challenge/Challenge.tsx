@@ -40,8 +40,8 @@ function Progress({ section, of, label }: { section: number; of: number; label: 
           {section} / {of}
         </span>
       </div>
-      <div style={{ height: 3, background: "rgba(0,0,0,0.06)", borderRadius: 2, overflow: "hidden" }}>
-        <div style={{ height: "100%", width: `${(section / of) * 100}%`, background: "var(--text)", transition: "width .3s" }} />
+      <div className="progress">
+        <div className="progress-fill" style={{ width: `${(section / of) * 100}%` }} />
       </div>
     </div>
   );
