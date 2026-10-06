@@ -21,19 +21,17 @@ const read = (): Consent | null => {
   }
 };
 
-/** 同意状況を保存し、Google の Consent Mode に反映する */
+/**
+ * 同意状況を保存して画面に知らせる。GA4 は同意後に初めて読み込まれる（Analytics.tsx）。
+ * 一度同意したあとに拒否へ変えた場合は、読み込み済みの GA4 にも送信停止を伝える。
+ */
 export const setConsent = (value: Consent) => {
   try {
     window.localStorage.setItem(KEY, value);
   } catch {
     // 保存できなくても、このページ表示中は反映する
   }
-  gtag()?.("consent", "update", {
-    analytics_storage: value,
-    ad_storage: value,
-    ad_user_data: value,
-    ad_personalization: value,
-  });
+  if (value === "denied") gtag()?.("consent", "update", { analytics_storage: "denied", ad_storage: "denied", ad_user_data: "denied", ad_personalization: "denied" });
   window.dispatchEvent(new Event(EVENT));
 };
 
