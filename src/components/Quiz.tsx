@@ -11,7 +11,7 @@ import { track } from "@/lib/analytics";
 import { ANSWER_VALUES, analyze, encodeAnswers, type Answer } from "@/lib/scoring";
 import { SITE_TEXT } from "@/lib/site-text";
 
-export function Quiz({ lang }: { lang: Lang }) {
+export function Quiz({ lang, pairWith }: { lang: Lang; pairWith?: string }) {
   const u = UI[lang];
   const t = SITE_TEXT[lang];
   const router = useRouter();
@@ -36,7 +36,7 @@ export function Quiz({ lang }: { lang: Lang }) {
     track({ name: "quiz_complete", top_type: result.sorted[0], profile: result.profile, consistency: result.consistency });
     clearProgress();
     saveLastResult(code);
-    router.push(localePath(lang, `/r/${code}`));
+    router.push(localePath(lang, pairWith ? `/pair/${pairWith}/${code}` : `/r/${code}`));
   };
 
   const transition = (next: () => void) => {

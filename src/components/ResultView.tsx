@@ -4,6 +4,7 @@ import { fill, localePath, type Lang } from "@/lib/i18n";
 import type { ChallengeResult } from "@/lib/challenge";
 import type { Analysis, ConsistencyLevel, ProfileKind } from "@/lib/scoring";
 import { OFFICIAL_TEST_URL } from "@/lib/site";
+import { PAIR_TEXT } from "@/lib/pair-text";
 import { SITE_TEXT } from "@/lib/site-text";
 import { AnimBar } from "./AnimBar";
 import { ChallengeCta, ChallengeResultView } from "./challenge/ChallengeResultView";
@@ -17,11 +18,12 @@ import { GUIDE_LABELS } from "@/lib/guides";
 
 const TOC_KEYS = ["profile", "scores", "categories", "guide", "details", "challenge", "share"] as const;
 
-type Props = { analysis: Analysis; lang: Lang; shareUrl: string; resultCode: string; challenge: ChallengeResult | null };
+type Props = { analysis: Analysis; lang: Lang; shareUrl: string; inviteUrl: string; resultCode: string; challenge: ChallengeResult | null };
 
-export function ResultView({ analysis, lang, shareUrl, resultCode, challenge }: Props) {
+export function ResultView({ analysis, lang, shareUrl, inviteUrl, resultCode, challenge }: Props) {
   const u = UI[lang];
   const t = SITE_TEXT[lang];
+  const p = PAIR_TEXT[lang];
   const { pct, sorted, top: topIds, next: nextId, categories, profile, consistency, consistencyLevel } = analysis;
   const types = sorted.map((id) => ({ ...getType(id, lang), pct: pct[id] }));
   const topTypes = types.filter((t) => topIds.includes(t.id));
@@ -144,7 +146,15 @@ export function ResultView({ analysis, lang, shareUrl, resultCode, challenge }: 
       </div>
 
       <div id="share">
-        <ShareButtons lang={lang} url={shareUrl} text={shareText} />
+        <ShareButtons lang={lang} url={shareUrl} text={shareText} imageUrl={localePath(lang, `/r/${resultCode}/story`)} />
+        <ShareButtons
+          lang={lang}
+          url={inviteUrl}
+          text={fill(p.inviteShareText, topLabels)}
+          title={p.inviteCardTitle}
+          lead={p.inviteCardLead}
+          context="invite"
+        />
       </div>
 
       <div className="card">
