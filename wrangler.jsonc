@@ -1,0 +1,18 @@
+{
+  // Cloudflare Workers で動かす設定（OpenNext が .open-next/ に書き出した Worker と静的ファイルを配信する）
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "main": ".open-next/worker.js",
+  "name": "cognitive-traits",
+  "compatibility_date": "2026-10-01",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "services": [
+    {
+      "binding": "WORKER_SELF_REFERENCE",
+      "service": "cognitive-traits"
+    }
+  ]
+}
