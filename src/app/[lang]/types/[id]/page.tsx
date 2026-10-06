@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CharacterSVG } from "@/components/Illustrations";
+import { AdSlot } from "@/components/AdSlot";
+import { Recommendations } from "@/components/Recommendations";
 import { TypeGuideView } from "@/components/TypeGuideView";
 import { GUIDES } from "@/lib/guides";
 import { TYPE_IDS, UI, getType, isTypeId } from "@/lib/content";
@@ -39,6 +41,8 @@ export default async function TypeDetailPage({ params }: PageProps<"/[lang]/type
         <p style={{ fontSize: 14, color: "var(--muted)" }}>{tp.sub}</p>
       </div>
       <TypeGuideView id={id} lang={lang} showHeader={false} />
+      {lang === "ja" && <Recommendations typeId={id} />}
+      <AdSlot lang={lang} />
       <div style={{ textAlign: "center", margin: "24px 0 36px" }}>
         <Link className="primary-btn" href={localePath(lang, "/quiz")}>
           {u.tryBtn}

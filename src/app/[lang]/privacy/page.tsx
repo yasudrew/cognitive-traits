@@ -28,6 +28,13 @@ export default async function PrivacyPage({ params }: PageProps<"/[lang]/privacy
               <DocText text={p} />
             </p>
           ))}
+          {sec.list && (
+            <ul>
+              {sec.list.map((li) => (
+                <li key={li}>{li}</li>
+              ))}
+            </ul>
+          )}
         </section>
       ))}
       <p style={{ marginTop: 40, fontSize: 14, color: "var(--muted)" }}>

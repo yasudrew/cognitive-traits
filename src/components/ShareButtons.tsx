@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useSyncExternalStore } from "react";
+import { track } from "@/lib/analytics";
 import { UI } from "@/lib/content";
 import type { Lang } from "@/lib/i18n";
 
@@ -19,6 +20,7 @@ export function ShareButtons({ lang, url, text }: Props) {
   const copy = async () => {
     try {
       await navigator.clipboard.writeText(url);
+      track({ name: "share", method: "copy" });
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (e) {
@@ -29,6 +31,7 @@ export function ShareButtons({ lang, url, text }: Props) {
   const nativeShare = async () => {
     try {
       await navigator.share({ text, url });
+      track({ name: "share", method: "native" });
     } catch (e) {
       // ユーザーが共有シートを閉じた場合は AbortError になるので無視する
       if (!(e instanceof DOMException && e.name === "AbortError")) console.error("Share failed", e);
@@ -39,11 +42,11 @@ export function ShareButtons({ lang, url, text }: Props) {
     <div className="card">
       <h2 className="section-title">{u.shareTitle}</h2>
       <div className="share-row">
-        <a className="share-btn x" href={xUrl} target="_blank" rel="noopener noreferrer">
+        <a className="share-btn x" href={xUrl} target="_blank" rel="noopener noreferrer" onClick={() => track({ name: "share", method: "x" })}>
           𝕏 Post
         </a>
         {lang === "ja" && (
-          <a className="share-btn line" href={lineUrl} target="_blank" rel="noopener noreferrer">
+          <a className="share-btn line" href={lineUrl} target="_blank" rel="noopener noreferrer" onClick={() => track({ name: "share", method: "line" })}>
             LINE
           </a>
         )}

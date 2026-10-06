@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
 import { Zen_Kaku_Gothic_New } from "next/font/google";
 import { notFound } from "next/navigation";
+import { Analytics } from "@/components/Analytics";
+import { ConsentBanner } from "@/components/ConsentBanner";
 import { Footer } from "@/components/Footer";
 import { Nav } from "@/components/Nav";
 import { UI } from "@/lib/content";
 import { LANGS, isLang } from "@/lib/i18n";
+import { ADSENSE_CLIENT } from "@/lib/monetize-config";
 import { SITE_URL, alternates } from "@/lib/site";
 import "../globals.css";
 
@@ -38,6 +41,8 @@ export async function generateMetadata({ params }: LayoutProps<"/[lang]">): Prom
     },
     twitter: { card: "summary_large_image" },
     icons: { icon: "/favicon.svg" },
+    // AdSense のサイト確認用
+    other: ADSENSE_CLIENT ? { "google-adsense-account": ADSENSE_CLIENT } : {},
   };
 }
 
@@ -54,6 +59,8 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[la
             <Footer lang={lang} />
           </div>
         </div>
+        <ConsentBanner lang={lang} />
+        <Analytics />
       </body>
     </html>
   );

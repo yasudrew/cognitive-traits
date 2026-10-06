@@ -3,7 +3,7 @@ import { TYPE_IDS } from "@/lib/content";
 import { LANGS } from "@/lib/i18n";
 import { absoluteUrl } from "@/lib/site";
 
-const PATHS = ["/", "/about", "/types", ...TYPE_IDS.map((id) => `/types/${id}`)];
+const PATHS = ["/", "/about", "/types", ...TYPE_IDS.map((id) => `/types/${id}`), "/privacy", "/operator"];
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return PATHS.map((path) => ({

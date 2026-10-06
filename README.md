@@ -29,6 +29,18 @@ npm run dev
 
 本番URLは環境変数 `NEXT_PUBLIC_SITE_URL` で指定する（未設定時は `https://cognitive-traits.vercel.app`）。canonical・OG画像・sitemap がこの値を使う。
 
+### 環境変数（Vercel）
+
+| 変数 | 内容 | 未設定のとき |
+|------|------|------|
+| `NEXT_PUBLIC_SITE_URL` | 本番URL | `https://cognitive-traits.vercel.app` |
+| `NEXT_PUBLIC_GA_ID` | GA4 の測定ID（G-…） | 計測・同意バナーを出さない |
+| `NEXT_PUBLIC_ADSENSE_CLIENT` | AdSense のパブリッシャーID（ca-pub-…） | AdSense のスクリプト・確認タグ・`ads.txt` を出さない |
+| `NEXT_PUBLIC_ADSENSE_SLOT` | AdSense の広告ユニットID | 広告枠を出さない |
+| `NEXT_PUBLIC_AMAZON_TAG` | Amazonアソシエイトのトラッキングタグ | おすすめはタグなしリンク・PR表記なし |
+
+GA4 は Consent Mode v2 で既定を拒否にしており、同意バナーで「同意する」を選んだときだけCookieを使う。
+
 ## URL構成
 
 | パス | 内容 |
@@ -51,6 +63,7 @@ npm run dev
 - `src/lib/scoring.ts` — 採点・プロフィール判定・回答の一貫性、結果コードのエンコード／デコード
 - `src/lib/challenge.ts` — 精密チャレンジの課題生成・採点・結果コード
 - `src/lib/guides.ts` — タイプ別の詳しい解説（日英）
+- `src/lib/monetize-config.ts` / `src/lib/recommendations.ts` — 計測・広告・アフィリエイトの設定とタイプ別おすすめ
 - `src/lib/site-text.ts` / `src/lib/legal-text.ts` — トップ・FAQ・規約ページの文言
 - `src/app/[lang]/` — 各ページと OG 画像
 
