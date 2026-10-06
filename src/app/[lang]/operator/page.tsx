@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { DocText } from "@/components/DocText";
 import { isLang } from "@/lib/i18n";
-import { LEGAL_DRAFT, OPERATOR } from "@/lib/legal-text";
+import { LEGAL_DRAFT, OPERATOR, OPERATOR_EMAIL } from "@/lib/legal-text";
 import { alternates } from "@/lib/site";
 import { SITE_TEXT } from "@/lib/site-text";
 
@@ -25,7 +25,13 @@ export default async function OperatorPage({ params }: PageProps<"/[lang]/operat
           <div key={k} style={{ display: "contents" }}>
             <dt>{k}</dt>
             <dd>
-              <DocText text={v} />
+              {v === OPERATOR_EMAIL ? (
+                <a className="text-link" href={`mailto:${v}`}>
+                  {v}
+                </a>
+              ) : (
+                <DocText text={v} />
+              )}
             </dd>
           </div>
         ))}
