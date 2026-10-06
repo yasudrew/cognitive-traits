@@ -33,5 +33,5 @@ export default async function ResultPage({ params, searchParams }: PageProps<"/[
   const answers = decodeAnswers(code);
   if (!answers) notFound();
   const shareUrl = absoluteUrl(lang, `/r/${code}`) + (challenge && typeof x === "string" ? `?x=${x}` : "");
-  return <ResultView analysis={analyze(answers)} lang={lang} shareUrl={shareUrl} resultCode={code} challenge={challenge} />;
+  return <ResultView analysis={analyze(answers)} lang={lang} shareUrl={shareUrl} inviteUrl={absoluteUrl(lang, `/pair/${code}`)} resultCode={code} challenge={challenge} />;
 }
