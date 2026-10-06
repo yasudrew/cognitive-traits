@@ -1,4 +1,5 @@
 import type { TypeId } from "../content";
+import { RELATIONSHIP_ARTICLES } from "./relationships";
 import { STUDY_ARTICLES } from "./study";
 import { WORK_ARTICLES } from "./work";
 import type { Article } from "./types";
@@ -6,7 +7,7 @@ import type { Article } from "./types";
 export * from "./types";
 
 /** 公開中の記事（日本語のみ） */
-export const ARTICLES: readonly Article[] = [...STUDY_ARTICLES, ...WORK_ARTICLES];
+export const ARTICLES: readonly Article[] = [...STUDY_ARTICLES, ...WORK_ARTICLES, ...RELATIONSHIP_ARTICLES];
 
 export const getArticle = (slug: string): Article | undefined => ARTICLES.find((a) => a.slug === slug);
 

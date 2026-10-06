@@ -97,7 +97,9 @@ export default async function ArticlePage({ params }: PageProps<"/[lang]/article
 
       <div className="final-cta" style={{ marginTop: 40 }}>
         <p style={{ fontSize: 20, fontWeight: 700, marginBottom: 8 }}>あなたは本当に{tp.label}？</p>
-        <p style={{ fontSize: 14, color: "var(--sub)", marginBottom: 24 }}>30問・約5分で、6タイプのバランスがわかります。</p>
+        <p style={{ fontSize: 14, color: "var(--sub)", marginBottom: 24 }}>
+          {a.topic === "relationships" ? "30問・約5分。結果ページから、友だちや家族を相性診断に招待できます。" : "30問・約5分で、6タイプのバランスがわかります。"}
+        </p>
         <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
           <Link className="primary-btn" href={localePath(lang, "/quiz")}>
             {u.startBtn}

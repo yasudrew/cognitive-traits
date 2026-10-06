@@ -7,7 +7,7 @@ import { getType } from "@/lib/content";
 import { isLang, localePath } from "@/lib/i18n";
 
 const TITLE = "読みもの｜認知特性タイプ別の勉強法・活かし方";
-const DESCRIPTION = "カメラ・3D・ファンタジー・辞書・ラジオ・サウンドの6タイプ別に、自分に合った勉強法や、仕事での強みの活かし方を紹介する記事の一覧です。";
+const DESCRIPTION = "カメラ・3D・ファンタジー・辞書・ラジオ・サウンドの6タイプ別に、自分に合った勉強法、仕事での強みの活かし方、人間関係ですれ違いを減らすコツを紹介する記事の一覧です。";
 const TOPICS: readonly ArticleTopic[] = ["study", "work", "relationships"];
 
 export async function generateMetadata({ params }: PageProps<"/[lang]/articles">): Promise<Metadata> {
