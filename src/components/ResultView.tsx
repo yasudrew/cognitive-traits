@@ -42,7 +42,7 @@ export function ResultView({ analysis, lang, shareUrl, resultCode, challenge }: 
       <div className="result-hero" style={{ padding: "40px 24px", background: single ? top.bg : "var(--surface)", marginBottom: 24, textAlign: "center" }}>
         <div style={{ display: "flex", justifyContent: "center", gap: single ? 0 : 16, marginBottom: 8 }}>
           {topTypes.map((tp) => (
-            <CharacterSVG key={tp.id} type={tp.id} size={topTypes.length > 2 ? 80 : single ? 132 : 100} />
+            <CharacterSVG key={tp.id} type={tp.id} size={topTypes.length > 2 ? 72 : single ? 120 : 96} />
           ))}
         </div>
         <div style={{ display: "flex", justifyContent: "center", gap: 8, flexWrap: "wrap", marginBottom: 8 }}>

@@ -44,7 +44,7 @@ export function TypeAccordion({ rows, lang }: { rows: Row[]; lang: Lang }) {
             </button>
             <div style={{ overflow: "hidden", transition: "max-height .35s ease,opacity .25s,padding .25s", maxHeight: open ? 700 : 0, opacity: open ? 1 : 0, padding: open ? "8px 24px 20px" : "0 24px" }}>
               <div style={{ display: "flex", justifyContent: "center", marginBottom: 12 }}>
-                <CharacterSVG type={tp.id} size={80} />
+                <CharacterSVG type={tp.id} size={72} />
               </div>
               <p style={{ fontSize: 14, color: "var(--sub)", lineHeight: 1.8, marginBottom: 12 }}>{tp.desc}</p>
               <TypeDetail type={tp} lang={lang} />

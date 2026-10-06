@@ -32,7 +32,7 @@ export default async function TypeDetailPage({ params }: PageProps<"/[lang]/type
     <div className="fadein" style={{ paddingTop: 32, paddingBottom: 40 }}>
       <div className="result-hero" style={{ padding: "40px 24px", background: tp.bg, marginBottom: 24, textAlign: "center" }}>
         <div style={{ display: "flex", justifyContent: "center", marginBottom: 8 }}>
-          <CharacterSVG type={id} size={132} />
+          <CharacterSVG type={id} size={120} />
         </div>
         <span className="badge" style={{ color: "var(--text)", background: "var(--surface)", border: `1px solid ${tp.color}`, marginBottom: 8 }}>{tp.category}</span>
         <h1 className="result-top-label" style={{ fontSize: 32, fontWeight: 700, color: tp.color, marginBottom: 4 }}>{tp.label}</h1>

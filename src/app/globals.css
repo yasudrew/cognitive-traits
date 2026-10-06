@@ -68,10 +68,9 @@ a{color:inherit}
 .result-hero{border-radius:var(--r-lg)}
 
 /* ═══ トップ ═══ */
-.char-row{display:flex;justify-content:space-between;align-items:flex-end;padding:24px 16px 16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);margin:40px 0 16px}
-.char-row>div{width:15%;display:flex;justify-content:center}
-/* キャラクターSVGは余白が大きいので、はみ出させて実寸を大きく見せる */
-.char-row svg{flex-shrink:0;width:165%;height:auto;margin:-14% 0 -26%}
+.char-row{display:flex;justify-content:space-between;align-items:flex-end;padding:16px 12px 8px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);margin:40px 0 16px}
+.char-row>div{width:16%}
+.char-row svg{display:block;width:100%;height:auto}
 .cat-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .cat-card{border-radius:var(--r-md);padding:16px 8px;text-align:center}
 
