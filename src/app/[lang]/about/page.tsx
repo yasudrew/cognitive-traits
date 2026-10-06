@@ -21,19 +21,19 @@ export default async function AboutPage({ params }: PageProps<"/[lang]/about">) 
   const strong = { color: "var(--text)" } as const;
   return (
     <div className="fadein" style={{ paddingTop: 32, paddingBottom: 40 }}>
-      <h1 style={{ fontSize: 24, fontWeight: 900, color: "var(--text)", marginBottom: 4 }}>{u.aboutTitle}</h1>
-      <p style={{ fontSize: 13, color: "var(--muted)", marginBottom: 24 }}>{u.aboutSub}</p>
+      <h1 style={{ fontSize: 24, fontWeight: 700, color: "var(--text)", marginBottom: 4 }}>{u.aboutTitle}</h1>
+      <p style={{ fontSize: 14, color: "var(--muted)", marginBottom: 24 }}>{u.aboutSub}</p>
       <div className="card">
-        <p className="about-body" style={{ fontSize: 14, color: "var(--sub)", lineHeight: 2, marginBottom: 16 }}>
+        <p className="about-body" style={{ fontSize: 16, color: "var(--sub)", lineHeight: 2, marginBottom: 16 }}>
           {u.aboutP1}
           <strong style={strong}>{u.aboutP1b}</strong>
           {u.aboutP1c}
         </p>
-        <p className="about-body" style={{ fontSize: 14, color: "var(--sub)", lineHeight: 2 }}>{u.aboutP2}</p>
+        <p className="about-body" style={{ fontSize: 16, color: "var(--sub)", lineHeight: 2 }}>{u.aboutP2}</p>
       </div>
       <div className="card">
-        <h2 style={{ fontSize: 15, fontWeight: 700, color: "var(--text)", marginBottom: 12 }}>{u.about3title}</h2>
-        <p style={{ fontSize: 13, color: "var(--sub)", lineHeight: 1.9, marginBottom: 16 }}>{u.about3desc}</p>
+        <h2 style={{ fontSize: 16, fontWeight: 700, color: "var(--text)", marginBottom: 12 }}>{u.about3title}</h2>
+        <p style={{ fontSize: 14, color: "var(--sub)", lineHeight: 1.9, marginBottom: 16 }}>{u.about3desc}</p>
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
           {CATEGORIES.map((c) => (
             <div key={c.id} style={{ padding: "16px 18px", borderRadius: 10, background: `${c.color}08`, border: `1px solid ${c.color}12` }}>
@@ -58,8 +58,8 @@ export default async function AboutPage({ params }: PageProps<"/[lang]/about">) 
         </div>
       </div>
       <div className="card">
-        <h2 style={{ fontSize: 15, fontWeight: 700, color: "var(--text)", marginBottom: 12 }}>{u.aboutBenTitle}</h2>
-        <div style={{ fontSize: 13, color: "var(--sub)", lineHeight: 2 }}>
+        <h2 style={{ fontSize: 16, fontWeight: 700, color: "var(--text)", marginBottom: 12 }}>{u.aboutBenTitle}</h2>
+        <div style={{ fontSize: 14, color: "var(--sub)", lineHeight: 2 }}>
           <p style={{ marginBottom: 12 }}>
             {u.aboutBen1a}
             <strong style={strong}>{u.aboutBen1b}</strong>
@@ -78,8 +78,8 @@ export default async function AboutPage({ params }: PageProps<"/[lang]/about">) 
         </div>
       </div>
       <div className="card">
-        <h2 style={{ fontSize: 15, fontWeight: 700, color: "var(--text)", marginBottom: 12 }}>{u.aboutThisTitle}</h2>
-        <p style={{ fontSize: 13, color: "var(--sub)", lineHeight: 2, marginBottom: 8 }}>{u.aboutThisP}</p>
+        <h2 style={{ fontSize: 16, fontWeight: 700, color: "var(--text)", marginBottom: 12 }}>{u.aboutThisTitle}</h2>
+        <p style={{ fontSize: 14, color: "var(--sub)", lineHeight: 2, marginBottom: 8 }}>{u.aboutThisP}</p>
         <p style={{ fontSize: 12, color: "var(--muted)", lineHeight: 1.8 }}>
           {u.aboutThisNote}{" "}
           <a className="text-link" href={OFFICIAL_TEST_URL} target="_blank" rel="noopener noreferrer">

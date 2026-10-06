@@ -47,19 +47,19 @@ export function Quiz({ lang }: { lang: Lang }) {
 
   return (
     <div style={{ paddingTop: 32, paddingBottom: 40 }}>
-      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
-        <span style={{ fontSize: 13, fontWeight: 700, color: "var(--text)" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
+        <span style={{ fontSize: 14, fontWeight: 700, color: "var(--text)" }}>
           Q{idx + 1}
           <span style={{ color: "var(--muted)", fontWeight: 400 }}> / {total}</span>
         </span>
-        <span style={{ fontSize: 13, color: "var(--muted)" }}>{Math.round((idx / total) * 100)}%</span>
+        <span style={{ fontSize: 14, color: "var(--muted)" }}>{Math.round((idx / total) * 100)}%</span>
       </div>
-      <div className="progress" style={{ marginBottom: 20 }}>
+      <div className="progress" style={{ marginBottom: 24 }}>
         <div className="progress-fill" style={{ width: `${(idx / total) * 100}%` }} />
       </div>
       {idx === 0 && <p className="quiz-note">{u.quizNote}</p>}
       <div className={fade} key={idx}>
-        <h1 className="quiz-question" style={{ fontSize: 19, fontWeight: 700, lineHeight: 1.7, color: "var(--text)", marginBottom: 20 }}>
+        <h1 className="quiz-question" style={{ fontSize: 20, fontWeight: 700, lineHeight: 1.7, color: "var(--text)", marginBottom: 24 }}>
           {q.stem}
         </h1>
         <div className="pair">

@@ -13,21 +13,21 @@ export function TypeGuideView({ id, lang, heading, showHeader = true }: { id: Ty
     <section className="card">
       {heading && <h2 className="section-title">{heading}</h2>}
       {showHeader && (
-        <div style={{ display: "flex", gap: 14, alignItems: "center", marginBottom: 14 }}>
+        <div style={{ display: "flex", gap: 16, alignItems: "center", marginBottom: 16 }}>
           <CharacterSVG type={id} size={56} />
           <div>
-            <div style={{ fontSize: 17, fontWeight: 900, color: tp.color }}>{tp.label}</div>
-            <div style={{ fontSize: 11, color: "var(--muted)" }}>
+            <div style={{ fontSize: 20, fontWeight: 700, color: tp.color }}>{tp.label}</div>
+            <div style={{ fontSize: 12, color: "var(--muted)" }}>
               {tp.category}・{tp.sub}
             </div>
           </div>
         </div>
       )}
-      <p className="about-body" style={{ fontSize: 14, color: "var(--sub)", lineHeight: 1.9, marginBottom: 20 }}>{g.summary}</p>
+      <p className="about-body" style={{ fontSize: 16, color: "var(--sub)", lineHeight: 1.9, marginBottom: 24 }}>{g.summary}</p>
       <div className="guide-grid">
         {GUIDE_SECTIONS.map((key) => (
           <div key={key} className="guide-block" style={{ borderColor: `${tp.color}1F`, background: `${tp.color}08` }}>
-            <h3 style={{ fontSize: 13, fontWeight: 800, color: tp.color, marginBottom: 8 }}>{labels[key]}</h3>
+            <h3 style={{ fontSize: 14, fontWeight: 700, color: tp.color, marginBottom: 8 }}>{labels[key]}</h3>
             <ul>
               {g[key].map((item) => (
                 <li key={item}>{item}</li>

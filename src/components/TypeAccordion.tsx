@@ -18,7 +18,7 @@ export function TypeAccordion({ rows, lang }: { rows: Row[]; lang: Lang }) {
 
   return (
     <div className="card" style={{ padding: "12px 0" }}>
-      <h2 className="section-title" style={{ marginTop: 8, marginBottom: 8 }}>
+      <h2 className="section-title" style={{ padding: "8px 24px 0", marginBottom: 8 }}>
         {u.detailTitle}
       </h2>
       {rows.map((tp) => {
@@ -29,14 +29,14 @@ export function TypeAccordion({ rows, lang }: { rows: Row[]; lang: Lang }) {
               <Dot color={tp.color} />
               <div style={{ flex: 1, textAlign: "left" }}>
                 <div style={{ fontSize: 14, fontWeight: 700, color: "var(--text)" }}>{tp.label}</div>
-                <div style={{ fontSize: 11, color: "var(--muted)" }}>{tp.sub}</div>
+                <div style={{ fontSize: 12, color: "var(--muted)" }}>{tp.sub}</div>
               </div>
               <div style={{ textAlign: "right", marginRight: 4 }}>
-                <div style={{ fontSize: 16, fontWeight: 800, color: tp.color }}>
+                <div style={{ fontSize: 16, fontWeight: 700, color: tp.color }}>
                   {tp.pct}
-                  <span style={{ fontSize: 11, fontWeight: 400, color: "var(--muted)" }}>%</span>
+                  <span style={{ fontSize: 12, fontWeight: 400, color: "var(--muted)" }}>%</span>
                 </div>
-                <div style={{ fontSize: 10, color: "var(--muted)" }}>{levelText[levelOf(tp.pct)]}</div>
+                <div style={{ fontSize: 12, color: "var(--muted)" }}>{levelText[levelOf(tp.pct)]}</div>
               </div>
               <svg width="12" height="12" viewBox="0 0 12 12" style={{ transition: "transform .3s", transform: open ? "rotate(180deg)" : "rotate(0)", flexShrink: 0 }}>
                 <path d="M2 4.5L6 8.5L10 4.5" stroke="#999" strokeWidth="1.5" fill="none" strokeLinecap="round" />
@@ -46,7 +46,7 @@ export function TypeAccordion({ rows, lang }: { rows: Row[]; lang: Lang }) {
               <div style={{ display: "flex", justifyContent: "center", marginBottom: 12 }}>
                 <CharacterSVG type={tp.id} size={80} />
               </div>
-              <p style={{ fontSize: 13, color: "var(--sub)", lineHeight: 1.8, marginBottom: 12 }}>{tp.desc}</p>
+              <p style={{ fontSize: 14, color: "var(--sub)", lineHeight: 1.8, marginBottom: 12 }}>{tp.desc}</p>
               <TypeDetail type={tp} lang={lang} />
               <p style={{ marginTop: 12, fontSize: 12 }}>
                 <Link className="text-link" href={localePath(lang, `/types/${tp.id}`)}>

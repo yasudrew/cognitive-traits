@@ -13,7 +13,7 @@ export function TypeDetail({ type, lang }: { type: TypeText; lang: Lang }) {
     <div style={{ fontSize: 12, color: "var(--muted)", lineHeight: 1.8 }}>
       {rows.map(([label, text], i) => (
         <p key={label} style={i < rows.length - 1 ? { marginBottom: 4 } : undefined}>
-          <span style={{ color: "var(--sub)", fontWeight: 600 }}>{label}</span>
+          <span style={{ color: "var(--sub)", fontWeight: 700 }}>{label}</span>
           {text}
         </p>
       ))}

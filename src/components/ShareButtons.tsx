@@ -36,7 +36,7 @@ export function ShareButtons({ lang, url, text }: Props) {
   };
 
   return (
-    <div className="card" style={{ textAlign: "center" }}>
+    <div className="card">
       <h2 className="section-title">{u.shareTitle}</h2>
       <div className="share-row">
         <a className="share-btn x" href={xUrl} target="_blank" rel="noopener noreferrer">

@@ -9,7 +9,7 @@ import { SITE_URL, alternates } from "@/lib/site";
 import "../globals.css";
 
 const font = Zen_Kaku_Gothic_New({
-  weight: ["400", "500", "700", "900"],
+  weight: ["400", "700"],
   subsets: ["latin"],
   // 日本語フォントは unicode-range で100以上のファイルに分割されるため、preloadすると初期表示が重くなる
   preload: false,

@@ -14,19 +14,19 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
     { label: u.catAuditory, sub: u.catAuditorySub, type: "auditory" },
   ];
   return (
-    <div className="fadein hero-top" style={{ paddingTop: 72, paddingBottom: 60 }}>
+    <div className="fadein hero-top" style={{ paddingTop: 64, paddingBottom: 60 }}>
       <p className="eyebrow">{u.heroSub}</p>
-      <h1 className="hero-title" style={{ fontSize: 36, fontWeight: 900, color: "var(--text)", lineHeight: 1.3, marginBottom: 16 }}>
+      <h1 className="hero-title" style={{ fontSize: 32, fontWeight: 700, color: "var(--text)", lineHeight: 1.3, marginBottom: 16 }}>
         {u.heroTitle1}
         <br className="sp-only" />
-        <span className="marker">{u.heroTitle2}</span>
+        <span className="accent">{u.heroTitle2}</span>
       </h1>
-      <p className="hero-sub" style={{ fontSize: 15, color: "var(--sub)", lineHeight: 1.9, marginBottom: 40 }}>{u.heroDesc}</p>
+      <p className="hero-sub" style={{ fontSize: 16, color: "var(--sub)", lineHeight: 1.9, marginBottom: 40 }}>{u.heroDesc}</p>
       <Link className="primary-btn" href={localePath(lang, "/quiz")}>
         {u.startBtn}
         <span style={{ marginLeft: 8 }}>→</span>
       </Link>
-      <p style={{ marginTop: 14, fontSize: 12, color: "var(--muted)" }}>{u.duration}</p>
+      <p style={{ marginTop: 16, fontSize: 12, color: "var(--muted)" }}>{u.duration}</p>
       <div className="char-row" aria-hidden>
         {TYPE_IDS.map((id) => (
           <div key={id}>
@@ -40,8 +40,8 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
             <div style={{ display: "flex", justifyContent: "center", marginBottom: 8 }}>
               <CategoryIcon type={c.type} size={44} />
             </div>
-            <div style={{ fontSize: 13, fontWeight: 700, color: "var(--text)" }}>{c.label}</div>
-            <div style={{ fontSize: 11, color: "var(--muted)", marginTop: 2 }}>{c.sub}</div>
+            <div style={{ fontSize: 14, fontWeight: 700, color: "var(--text)" }}>{c.label}</div>
+            <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 2 }}>{c.sub}</div>
           </div>
         ))}
       </div>

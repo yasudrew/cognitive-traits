@@ -22,23 +22,23 @@ function Compare({ label, self, measured, detail, color, lang, typeLabel }: { la
   const diff = measured - self;
   const comment = diff >= GAP ? fill(c.gapHigher, typeLabel) : diff <= -GAP ? fill(c.gapLower, typeLabel) : c.gapMatch;
   const row = (name: string, v: number, opacity: number) => (
-    <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
-      <span style={{ width: 52, fontSize: 11, color: "var(--muted)" }}>{name}</span>
+    <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
+      <span style={{ width: 52, fontSize: 12, color: "var(--muted)" }}>{name}</span>
       <div style={{ flex: 1, height: 8, background: "rgba(0,0,0,0.05)", borderRadius: 4 }}>
         <div style={{ width: `${v}%`, height: "100%", background: color, opacity, borderRadius: 4 }} />
       </div>
-      <span style={{ width: 36, textAlign: "right", fontSize: 13, fontWeight: 800, color }}>{v}</span>
+      <span style={{ width: 36, textAlign: "right", fontSize: 14, fontWeight: 700, color }}>{v}</span>
     </div>
   );
   return (
     <div style={{ marginBottom: 22 }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 8 }}>
-        <span style={{ fontSize: 13, fontWeight: 700 }}>{label}</span>
-        <span style={{ fontSize: 11, color: "var(--muted)" }}>{detail}</span>
+        <span style={{ fontSize: 14, fontWeight: 700 }}>{label}</span>
+        <span style={{ fontSize: 12, color: "var(--muted)" }}>{detail}</span>
       </div>
       {row(c.selfLabel, self, 0.45)}
       {row(c.measuredLabel, measured, 1)}
-      <p style={{ fontSize: 12, color: "var(--sub)", lineHeight: 1.7, marginTop: 6 }}>{comment}</p>
+      <p style={{ fontSize: 12, color: "var(--sub)", lineHeight: 1.7, marginTop: 8 }}>{comment}</p>
     </div>
   );
 }
@@ -74,8 +74,8 @@ export function ChallengeResultView({ result, analysis, lang, resultCode }: { re
         const tp = getType(id, lang);
         const v = result.vividness[id];
         return (
-          <div key={id} style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
-            <span style={{ width: 120, fontSize: 12, fontWeight: 600 }}>{tp.label}</span>
+          <div key={id} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
+            <span style={{ width: 120, fontSize: 12, fontWeight: 700 }}>{tp.label}</span>
             <div style={{ flex: 1, height: 8, background: "rgba(0,0,0,0.05)", borderRadius: 4 }}>
               <div style={{ width: `${vividnessPct(v)}%`, height: "100%", background: tp.color, borderRadius: 4 }} />
             </div>
@@ -88,8 +88,8 @@ export function ChallengeResultView({ result, analysis, lang, resultCode }: { re
           {n}
         </p>
       ))}
-      <p style={{ fontSize: 11, color: "var(--muted)", lineHeight: 1.7, marginTop: 14 }}>{c.resultNote}</p>
-      <p style={{ marginTop: 10, fontSize: 12 }}>
+      <p style={{ fontSize: 12, color: "var(--muted)", lineHeight: 1.7, marginTop: 16 }}>{c.resultNote}</p>
+      <p style={{ marginTop: 8, fontSize: 12 }}>
         <Link className="text-link" href={localePath(lang, `/challenge?r=${resultCode}`)}>
           {c.retry}
         </Link>
@@ -102,8 +102,8 @@ export function ChallengeCta({ lang, resultCode }: { lang: Lang; resultCode: str
   const c = CHALLENGE_TEXT[lang];
   return (
     <div className="card" style={{ textAlign: "center", borderColor: "var(--text)" }}>
-      <p style={{ fontSize: 16, fontWeight: 800, marginBottom: 8 }}>{c.ctaTitle}</p>
-      <p style={{ fontSize: 13, color: "var(--sub)", lineHeight: 1.8, marginBottom: 16 }}>{c.ctaDesc}</p>
+      <p style={{ fontSize: 16, fontWeight: 700, marginBottom: 8 }}>{c.ctaTitle}</p>
+      <p style={{ fontSize: 14, color: "var(--sub)", lineHeight: 1.8, marginBottom: 16 }}>{c.ctaDesc}</p>
       <Link className="primary-btn" href={localePath(lang, `/challenge?r=${resultCode}`)}>
         {c.ctaBtn}
         <span style={{ marginLeft: 8 }}>→</span>
