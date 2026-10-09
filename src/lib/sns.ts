@@ -4,6 +4,7 @@ import { GUIDES, GUIDE_LABELS } from "./guides";
 /**
  * SNS（主に Instagram）用の画像の一覧。日本語のみ。
  * - icon      … アカウントのアイコン（1080×1080）
+ * - header-x  … X のヘッダー（1500×500）
  * - intro     … 開設告知の1枚目（1080×1350）
  * - {type}-1〜5 … タイプ別の複数枚投稿（表紙・得意・つまずき・学び方・診断へ）
  */
@@ -11,6 +12,7 @@ export const SNS_SLIDE_COUNT = 5;
 
 export type SnsSlide =
   | { kind: "icon" }
+  | { kind: "header-x" }
   | { kind: "intro" }
   | { kind: "cover"; type: TypeId }
   | { kind: "list"; type: TypeId; section: "strengths" | "struggles" | "learning"; index: number }
@@ -20,6 +22,7 @@ const LIST_SECTIONS = ["strengths", "struggles", "learning"] as const;
 
 export const SNS_SLIDE_IDS: readonly string[] = [
   "icon",
+  "header-x",
   "intro",
   ...TYPE_IDS.flatMap((id) => Array.from({ length: SNS_SLIDE_COUNT }, (_, i) => `${id}-${i + 1}`)),
 ];
@@ -27,6 +30,7 @@ export const SNS_SLIDE_IDS: readonly string[] = [
 /** URL の slide 部分を解釈する。知らない形なら null */
 export function parseSnsSlide(slide: string): SnsSlide | null {
   if (slide === "icon") return { kind: "icon" };
+  if (slide === "header-x") return { kind: "header-x" };
   if (slide === "intro") return { kind: "intro" };
   const m = slide.match(/^(.+)-([1-9])$/);
   if (!m || !isTypeId(m[1])) return null;
@@ -41,6 +45,9 @@ export function parseSnsSlide(slide: string): SnsSlide | null {
 /** 画像に載せる文字。フォントの文字サブセットもここから作る */
 export function snsSlideText(slide: SnsSlide) {
   if (slide.kind === "icon") return { heading: "認知特性", lines: [] as string[] };
+  if (slide.kind === "header-x") {
+    return { heading: "あなたの認知特性を知ろう", lines: ["見て覚える？ 聞いて覚える？ 言葉で考える？", "30問・約5分・無料"] };
+  }
   if (slide.kind === "intro") {
     return {
       heading: "あなたの認知特性を知ろう",

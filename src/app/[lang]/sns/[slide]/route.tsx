@@ -12,6 +12,7 @@ export const generateStaticParams = () => SNS_SLIDE_IDS.map((slide) => ({ lang: 
 
 const PORTRAIT = { width: 1080, height: 1350 } as const;
 const SQUARE = { width: 1080, height: 1080 } as const;
+const X_HEADER = { width: 1500, height: 500 } as const;
 const BRAND = "#5B47C4";
 const INK = "#1A1A1A";
 const PAPER = "#FAFAF7";
@@ -29,7 +30,7 @@ export async function GET(_req: Request, { params }: RouteContext<"/[lang]/sns/[
   const [bold, black] = await Promise.all([loadOgFont(text, 700), loadOgFont(text, 900)]);
 
   return new ImageResponse(render(slide, heading, lines, host), {
-    ...(slide.kind === "icon" ? SQUARE : PORTRAIT),
+    ...(slide.kind === "icon" ? SQUARE : slide.kind === "header-x" ? X_HEADER : PORTRAIT),
     fonts: [
       { name: "Zen", data: bold, weight: 700, style: "normal" },
       { name: "Zen", data: black, weight: 900, style: "normal" },
@@ -53,6 +54,25 @@ function render(slide: SnsSlide, heading: string, lines: readonly string[], host
         <div style={{ display: "flex", gap: 36, marginTop: 48 }}>
           {CATEGORIES.map((c) => (
             <div key={c.id} style={{ width: 56, height: 56, borderRadius: 28, background: c.color, border: "6px solid #FFFFFF" }} />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (slide.kind === "header-x") {
+    const [sub, meta] = lines;
+    // 左下はプロフィール画像が重なるので、中身は右寄せで上下中央に置く
+    return (
+      <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 56, background: PAPER, fontFamily: "Zen", padding: "0 80px 0 380px" }}>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
+          <span style={{ fontSize: 28, fontWeight: 700, color: "#4A4A4A" }}>{sub}</span>
+          <span style={{ fontSize: 60, fontWeight: 900, color: INK, marginTop: 12 }}>{heading}</span>
+          <span style={{ fontSize: 34, fontWeight: 900, color: BRAND, marginTop: 16 }}>{meta}</span>
+        </div>
+        <div style={{ display: "flex", flexWrap: "wrap", width: 360, justifyContent: "center" }}>
+          {TYPE_IDS.map((id) => (
+            <CharacterSVG key={id} type={id} size={120} />
           ))}
         </div>
       </div>

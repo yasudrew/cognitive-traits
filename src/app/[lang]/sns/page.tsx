@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 };
 
 const GROUPS = [
-  { title: "アカウント・開設告知", slides: ["icon", "intro"] },
+  { title: "アカウント・開設告知", slides: ["icon", "header-x", "intro"] },
   ...TYPE_IDS.map((id) => ({
     title: getType(id, "ja").label,
     slides: Array.from({ length: SNS_SLIDE_COUNT }, (_, i) => `${id}-${i + 1}`),
