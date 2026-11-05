@@ -9,12 +9,11 @@ export type Block =
   | { kind: "steps"; items: readonly { title: string; body: string }[] }
   | { kind: "note"; text: string };
 
-export type ArticleTopic = "study" | "work" | "relationships";
+/** guide はタイプを問わない「伝え方」の記事（親・先生・リーダー向け） */
+export type ArticleTopic = "study" | "work" | "relationships" | "guide";
 
-export type Article = {
+type ArticleBase = {
   slug: string;
-  typeId: TypeId;
-  topic: ArticleTopic;
   title: string;
   description: string;
   published: string;
@@ -22,10 +21,13 @@ export type Article = {
   blocks: readonly Block[];
 };
 
+export type Article = ArticleBase & ({ topic: "guide"; typeId: null } | { topic: Exclude<ArticleTopic, "guide">; typeId: TypeId });
+
 export const TOPIC_LABEL: Record<ArticleTopic, string> = {
   study: "勉強法",
   work: "仕事",
   relationships: "人間関係",
+  guide: "伝え方",
 };
 
 /** どの記事にも入れる、学習スタイル仮説についての注意書き */
@@ -39,3 +41,7 @@ export const WORK_CAVEAT =
 /** 人間関係の記事に入れる注意書き */
 export const RELATIONSHIP_CAVEAT =
   "認知特性は情報の受け取り方の傾向で、性格や相性の良し悪しを決めるものではありません。同じタイプでも人によって違いがあり、関係は経験や工夫で変わっていきます。ここで紹介する内容は、すれ違いの理由を考えるヒントとして使ってください。";
+
+/** 伝え方ガイドに入れる注意書き */
+export const GUIDE_CAVEAT =
+  "認知特性は情報の受け取り方の傾向で、その人の能力や性格を決めるものではありません。とくに子どもは成長とともに変わっていくので、「この子は〇〇タイプだから」と決めつけず、反応を見ながら伝え方を試すヒントとして使ってください。また、「タイプに合った方法だけで学べば成績が上がる」という考え方（学習スタイル仮説）は、研究では十分に裏付けられていません。ここで紹介するのは、伝わりやすくするための工夫です。";

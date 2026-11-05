@@ -7,7 +7,7 @@ import { ArticleBody, headingsOf } from "@/components/ArticleBody";
 import { CharacterSVG } from "@/components/Illustrations";
 import { Recommendations } from "@/components/Recommendations";
 import { ARTICLES, TOPIC_LABEL, getArticle, relatedArticles } from "@/lib/articles";
-import { UI, getType } from "@/lib/content";
+import { TYPE_IDS, UI, getType } from "@/lib/content";
 import { localePath } from "@/lib/i18n";
 import { SITE_URL, absoluteUrl } from "@/lib/site";
 
@@ -32,8 +32,10 @@ export default async function ArticlePage({ params }: PageProps<"/[lang]/article
   const { lang, slug } = await params;
   const a = getArticle(slug);
   if (lang !== "ja" || !a) notFound();
-  const tp = getType(a.typeId, lang);
+  // 伝え方ガイドはタイプを問わないので、タイプ色ではなく共通の見た目にする
+  const tp = a.typeId === null ? null : getType(a.typeId, lang);
   const u = UI[lang];
+  const crumb = tp ? `${tp.label}の${TOPIC_LABEL[a.topic]}` : "伝え方ガイド";
   const toc = headingsOf(a.blocks);
   const related = relatedArticles(a);
   const url = absoluteUrl(lang, `/articles/${a.slug}`);
@@ -61,17 +63,17 @@ export default async function ArticlePage({ params }: PageProps<"/[lang]/article
       ],
     },
   ];
-  const hero: CSSProperties = { padding: "32px 24px", background: tp.bg, marginBottom: 24 };
+  const hero: CSSProperties = { padding: "32px 24px", background: tp ? tp.bg : "var(--surface)", marginBottom: 24 };
 
   return (
     <article className="fadein" style={{ paddingTop: 24, paddingBottom: 40 }}>
       <nav className="breadcrumb" aria-label="パンくずリスト">
-        <Link href={localePath(lang, "/")}>ホーム</Link> › <Link href={localePath(lang, "/articles")}>読みもの</Link> › <span>{tp.label}の{TOPIC_LABEL[a.topic]}</span>
+        <Link href={localePath(lang, "/")}>ホーム</Link> › <Link href={localePath(lang, "/articles")}>読みもの</Link> › <span>{crumb}</span>
       </nav>
       <header className="result-hero article-hero" style={hero}>
         <div>
-          <span className="badge" style={{ color: "var(--text)", background: "var(--surface)", border: `1px solid ${tp.color}` }}>
-            {tp.category}・{TOPIC_LABEL[a.topic]}
+          <span className="badge" style={{ color: "var(--text)", background: "var(--surface)", border: `1px solid ${tp ? tp.color : "var(--border)"}` }}>
+            {tp ? `${tp.category}・${TOPIC_LABEL[a.topic]}` : "伝え方ガイド"}
           </span>
           <h1>{a.title}</h1>
           <p style={{ fontSize: 12, color: "var(--muted)" }}>
@@ -79,7 +81,16 @@ export default async function ArticlePage({ params }: PageProps<"/[lang]/article
             {a.updated !== a.published && `・更新 ${a.updated}`}
           </p>
         </div>
-        <CharacterSVG type={a.typeId} size={112} />
+        {a.typeId === null ? (
+          // 1体のとき（112px）と同じ幅に6体を収める
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 36px)", gap: 2, flexShrink: 0 }}>
+            {TYPE_IDS.map((id) => (
+              <CharacterSVG key={id} type={id} size={36} />
+            ))}
+          </div>
+        ) : (
+          <CharacterSVG type={a.typeId} size={112} />
+        )}
       </header>
 
       <nav className="card article-toc" aria-label="目次">
@@ -96,24 +107,26 @@ export default async function ArticlePage({ params }: PageProps<"/[lang]/article
       <ArticleBody blocks={a.blocks} />
 
       <div className="final-cta" style={{ marginTop: 40 }}>
-        <p style={{ fontSize: 20, fontWeight: 700, marginBottom: 8 }}>あなたは本当に{tp.label}？</p>
+        <p style={{ fontSize: 20, fontWeight: 700, marginBottom: 8 }}>{tp ? `あなたは本当に${tp.label}？` : "あなたと相手は、どのタイプ？"}</p>
         <p style={{ fontSize: 14, color: "var(--sub)", marginBottom: 24 }}>
-          {a.topic === "relationships" ? "30問・約5分。結果ページから、友だちや家族を相性診断に招待できます。" : "30問・約5分で、6タイプのバランスがわかります。"}
+          {a.topic === "relationships" || a.topic === "guide" ? "30問・約5分。結果ページから、友だちや家族を相性診断に招待できます。" : "30問・約5分で、6タイプのバランスがわかります。"}
         </p>
         <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
           <Link className="primary-btn" href={localePath(lang, "/quiz")}>
             {u.startBtn}
             <span style={{ marginLeft: 8 }}>→</span>
           </Link>
-          <Link className="secondary-btn" href={localePath(lang, `/types/${a.typeId}`)}>
-            {tp.label}の解説を見る
+          <Link className="secondary-btn" href={localePath(lang, tp ? `/types/${tp.id}` : "/types")}>
+            {tp ? `${tp.label}の解説を見る` : "6つのタイプを見る"}
           </Link>
         </div>
       </div>
 
-      <div style={{ marginTop: 24 }}>
-        <Recommendations typeId={a.typeId} />
-      </div>
+      {a.typeId !== null && (
+        <div style={{ marginTop: 24 }}>
+          <Recommendations typeId={a.typeId} />
+        </div>
+      )}
       <AdSlot lang={lang} />
 
       {related.length > 0 && (
@@ -122,7 +135,7 @@ export default async function ArticlePage({ params }: PageProps<"/[lang]/article
           <div className="article-list">
             {related.map((r) => (
               <Link key={r.slug} className="type-link-card" href={localePath(lang, `/articles/${r.slug}`)}>
-                <CharacterSVG type={r.typeId} size={48} />
+                {r.typeId !== null && <CharacterSVG type={r.typeId} size={48} />}
                 <div style={{ flex: 1, fontSize: 14, fontWeight: 700, lineHeight: 1.5 }}>{r.title}</div>
               </Link>
             ))}
