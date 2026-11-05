@@ -16,8 +16,10 @@ import { TypeGuideView } from "./TypeGuideView";
 import { AdSlot } from "./AdSlot";
 import { Recommendations } from "./Recommendations";
 import { GUIDE_LABELS } from "@/lib/guides";
+import { RESULT_SECTIONS } from "@/lib/analytics";
+import { ResultTracker } from "./ResultTracker";
 
-const TOC_KEYS = ["profile", "scores", "categories", "guide", "details", "challenge", "share"] as const;
+const TOC_KEYS = RESULT_SECTIONS;
 
 type Props = { analysis: Analysis; lang: Lang; shareUrl: string; inviteUrl: string; resultCode: string; challenge: ChallengeResult | null };
 
@@ -47,7 +49,8 @@ export function ResultView({ analysis, lang, shareUrl, inviteUrl, resultCode, ch
   const cons = consistencyText[consistencyLevel];
 
   return (
-    <div className="fadein" style={{ paddingTop: 32, paddingBottom: 40 }}>
+    <div className="fadein" style={{ paddingTop: 32, paddingBottom: 40 }} data-result-root>
+      <ResultTracker topType={top.id} hasChallenge={challenge !== null} />
       <div className="result-hero" style={{ padding: "40px 24px", background: single ? top.bg : "var(--surface)", marginBottom: 24, textAlign: "center" }}>
         <div style={{ display: "flex", justifyContent: "center", gap: single ? 0 : 16, marginBottom: 8 }}>
           {topTypes.map((tp) => (
