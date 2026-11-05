@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useSyncExternalStore } from "react";
-import { track, type ShareContext } from "@/lib/analytics";
+import { track, withShareUtm, type ShareContext } from "@/lib/analytics";
 import { UI } from "@/lib/content";
 import type { Lang } from "@/lib/i18n";
 
@@ -26,12 +26,12 @@ export function ShareButtons({ lang, url, text, title, imageUrl, lead, context =
   const [saving, setSaving] = useState(false);
   // サーバーでは false にしてハイドレーションのずれを防ぐ
   const canShare = useSyncExternalStore(noopSubscribe, () => "share" in navigator, () => false);
-  const xUrl = `https://twitter.com/intent/tweet?${new URLSearchParams({ text, url, hashtags: u.shareHashtag })}`;
-  const lineUrl = `https://social-plugins.line.me/lineit/share?${new URLSearchParams({ url })}`;
+  const xUrl = `https://twitter.com/intent/tweet?${new URLSearchParams({ text, url: withShareUtm(url, "x", context), hashtags: u.shareHashtag })}`;
+  const lineUrl = `https://social-plugins.line.me/lineit/share?${new URLSearchParams({ url: withShareUtm(url, "line", context) })}`;
 
   const copy = async () => {
     try {
-      await navigator.clipboard.writeText(url);
+      await navigator.clipboard.writeText(withShareUtm(url, "copy", context));
       track({ name: "share", method: "copy", context });
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
@@ -42,7 +42,7 @@ export function ShareButtons({ lang, url, text, title, imageUrl, lead, context =
 
   const nativeShare = async () => {
     try {
-      await navigator.share({ text, url });
+      await navigator.share({ text, url: withShareUtm(url, "native", context) });
       track({ name: "share", method: "native", context });
     } catch (e) {
       // ユーザーが共有シートを閉じた場合は AbortError になるので無視する
