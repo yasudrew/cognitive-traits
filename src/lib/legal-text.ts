@@ -8,12 +8,12 @@ type Section = { h: string; body: readonly string[]; list?: readonly string[] };
 export const PRIVACY: Record<Lang, { title: string; sections: readonly Section[]; updated: string }> = {
   ja: {
     title: "プライバシーポリシー",
-    updated: "制定日：2026年10月6日",
+    updated: "制定日：2026年10月6日／改定日：2026年11月10日",
     sections: [
       {
         h: "1. 取得する情報",
         body: [
-          "本サイトでは、診断の回答をデータベース等に保存しません。診断結果は回答をもとに作成したURLに含まれており、そのURLを共有しない限り第三者が閲覧することはありません。なお、ページの表示に伴い、URLを含む通信記録がホスティング事業者（Vercel Inc.）のアクセスログに一時的に記録される場合があります。",
+          "本サイトでは、診断の回答をデータベース等に保存しません。診断結果は回答をもとに作成したURLに含まれており、そのURLを共有しない限り第三者が閲覧することはありません。なお、ページの表示に伴い、URLを含む通信記録がホスティング事業者（Cloudflare, Inc.）のアクセスログに一時的に記録される場合があります。",
           "回答の途中経過、直近の診断結果、Cookie利用への同意状況は、再開や再表示のためにお使いのブラウザ（localStorage）にのみ保存されます。ブラウザの設定から削除できます。",
         ],
       },
@@ -44,7 +44,8 @@ export const PRIVACY: Record<Lang, { title: string; sections: readonly Section[]
         list: [
           "Google LLC（Google アナリティクス）：閲覧ページ、参照元、端末・ブラウザの情報、Cookie識別子。サイトの利用状況の分析に使います。同意した場合のみ。",
           "Google LLC（Google アドセンス）：閲覧ページ、端末・ブラウザの情報、Cookie識別子。広告の配信と効果測定に使います。",
-          "Vercel Inc.（ホスティング）：アクセスしたURL、IPアドレス、ブラウザの情報。サイトの配信と障害対応に使います。",
+          "Cloudflare, Inc.（ホスティング）：アクセスしたURL、IPアドレス、ブラウザの情報。サイトの配信と障害対応に使います。",
+          "Vercel Inc.（旧URLからの転送）：旧URL（cognitive-traits.vercel.app）にアクセスした場合のみ、アクセスしたURL、IPアドレス、ブラウザの情報。現在のURLへ転送するために使います。",
         ],
       },
       {
@@ -60,12 +61,12 @@ export const PRIVACY: Record<Lang, { title: string; sections: readonly Section[]
   },
   en: {
     title: "Privacy Policy",
-    updated: "Effective date: October 6, 2026",
+    updated: "Effective date: October 6, 2026 / Last updated: November 10, 2026",
     sections: [
       {
         h: "1. Information we collect",
         body: [
-          "Your answers are not stored in any database. Your result is encoded in its URL, so no one else can see it unless you share that URL. Requests, including URLs, may be temporarily recorded in our hosting provider's (Vercel Inc.) access logs.",
+          "Your answers are not stored in any database. Your result is encoded in its URL, so no one else can see it unless you share that URL. Requests, including URLs, may be temporarily recorded in our hosting provider's (Cloudflare, Inc.) access logs.",
           "Your in-progress answers, latest result, and cookie consent choice are stored only in your browser (localStorage). You can delete them in your browser settings.",
         ],
       },
@@ -96,7 +97,8 @@ export const PRIVACY: Record<Lang, { title: string; sections: readonly Section[]
         list: [
           "Google LLC (Google Analytics): pages viewed, referrer, device and browser info, cookie identifiers — for usage analysis, only with your consent.",
           "Google LLC (Google AdSense): pages viewed, device and browser info, cookie identifiers — for serving and measuring ads.",
-          "Vercel Inc. (hosting): requested URLs, IP address, browser info — for delivering the site and troubleshooting.",
+          "Cloudflare, Inc. (hosting): requested URLs, IP address, browser info — for delivering the site and troubleshooting.",
+          "Vercel Inc. (redirect from the old URL): only when you visit the old URL (cognitive-traits.vercel.app) — requested URLs, IP address, browser info — for redirecting you to the current URL.",
         ],
       },
       {
